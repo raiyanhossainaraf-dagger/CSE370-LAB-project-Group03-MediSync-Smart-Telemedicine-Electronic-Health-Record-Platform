@@ -1,0 +1,1 @@
+# MediSync-Smart-Telemedicine-Electronic-Health-Record-Platform
