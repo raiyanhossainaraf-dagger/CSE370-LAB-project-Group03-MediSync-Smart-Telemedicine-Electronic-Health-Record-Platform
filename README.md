@@ -8,7 +8,6 @@ The primary objective of this project is to demonstrate the **design and impleme
 
 This project was developed as part of the **CSE370: Database Systems** course to showcase the practical application of database concepts such as **entity-relationship modeling, normalization, relational constraints, and SQL query optimization**, while integrating them with a modern backend framework.
 
----
 
 ## Objectives
 
@@ -20,22 +19,13 @@ The main objectives of MediSync are:
 * To manage **electronic health records (EHR)** efficiently.
 * To provide a structured platform for **appointment scheduling and prescription management**.
 
----
+
 
 ## System Architecture
 
 The application follows a **modular backend architecture** built with FastAPI and SQLAlchemy. The architecture separates responsibilities into layers to ensure maintainability, scalability, and clear project organization.
 
-### Architecture Layers
 
-1. **API Layer** – Handles incoming HTTP requests and API routing.
-2. **Service Layer** – Implements business logic and system workflows.
-3. **Data Access Layer** – Manages database interactions via ORM models.
-4. **Database Layer** – Stores relational data with integrity constraints.
-
-This layered architecture reflects common patterns used in **industry-grade backend systems**.
-
----
 
 ## Key Features
 
@@ -63,7 +53,6 @@ This layered architecture reflects common patterns used in **industry-grade back
 * Healthcare analytics dashboard
 * Activity logging for system events
 
----
 
 ## Database Design
 
@@ -90,7 +79,6 @@ The system is built upon a **relational database schema** designed according to 
 
 The schema enforces **foreign key constraints** to maintain data consistency across all related entities.
 
----
 
 ## Technology Stack
 
@@ -103,8 +91,8 @@ The schema enforces **foreign key constraints** to maintain data consistency acr
 
 ### Database
 
-* PostgreSQL (recommended)
-* MySQL (alternative)
+* PostgreSQL or
+* MySQL 
 
 ### Frontend
 
@@ -118,7 +106,6 @@ The schema enforces **foreign key constraints** to maintain data consistency acr
 * JWT-based authentication
 * RESTful API documentation via Swagger UI
 
----
 
 ## Project Structure
 
@@ -146,87 +133,8 @@ medisync/
 ├── README.md
 └── .env
 ```
-
 This modular structure separates concerns across multiple components, allowing the application to scale and remain maintainable as new features are added.
 
----
-
-## API Documentation
-
-FastAPI automatically generates interactive API documentation.
-
-After starting the server, the API documentation can be accessed at:
-
-```
-http://127.0.0.1:8000/docs
-```
-
-This interface allows developers to test endpoints and inspect request/response schemas.
-
----
-
-## Installation Guide
-
-### 1. Clone the Repository
-
-```
-git clone https://github.com/your-repository/medisync.git
-cd medisync
-```
-
-### 2. Create a Virtual Environment
-
-```
-python -m venv venv
-```
-
-Activate the environment:
-
-Mac/Linux:
-
-```
-source venv/bin/activate
-```
-
-Windows:
-
-```
-venv\Scripts\activate
-```
-
-### 3. Install Dependencies
-
-```
-pip install -r requirements.txt
-```
-
-### 4. Configure Environment Variables
-
-Create a `.env` file and define the database connection:
-
-```
-DATABASE_URL=postgresql://username:password@localhost/medisync
-```
-
-### 5. Run the Application
-
-```
-uvicorn app.main:app --reload
-```
-
----
-
-## Future Improvements
-
-While the current implementation demonstrates the core features of a telemedicine platform, several improvements can be integrated in future versions:
-
-* Real-time video consultations
-* AI-assisted symptom analysis
-* Appointment wait-time prediction
-* Mobile application integration
-* Advanced healthcare analytics dashboards
-
----
 
 ## Educational Value
 
@@ -240,19 +148,6 @@ This project demonstrates practical applications of several **core database conc
 
 Additionally, it highlights the integration of database systems with **modern backend web frameworks**, providing a strong foundation for real-world software development.
 
----
-
-## Contributors
-
-This project was developed collaboratively as part of the **CSE370 Database Systems course**. Each contributor was responsible for designing and implementing different system modules, including patient services, doctor services, and administrative management features.
-
----
-
-## License
-
-This project is intended for **educational and academic purposes**.
-
----
 
 ## Conclusion
 
