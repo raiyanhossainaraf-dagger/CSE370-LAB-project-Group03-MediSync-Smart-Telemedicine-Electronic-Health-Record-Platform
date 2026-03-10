@@ -14,7 +14,6 @@ This project was developed as part of the **CSE370: Database Systems** course to
 The main objectives of MediSync are:
 
 * To design a **scalable relational database schema** for healthcare data management.
-* To implement a **RESTful backend API** using Python.
 * To demonstrate **role-based system architecture** for patients, doctors, and administrators.
 * To manage **electronic health records (EHR)** efficiently.
 * To provide a structured platform for **appointment scheduling and prescription management**.
@@ -23,7 +22,7 @@ The main objectives of MediSync are:
 
 ## System Architecture
 
-The application follows a **modular backend architecture** built with FastAPI and SQLAlchemy. The architecture separates responsibilities into layers to ensure maintainability, scalability, and clear project organization.
+The application follows a **modular backend architecture** built with FastAPI and mysql-connector-python. The architecture separates responsibilities into layers to ensure maintainability, scalability, and clear project organization.
 
 
 
@@ -86,12 +85,11 @@ The schema enforces **foreign key constraints** to maintain data consistency acr
 
 * Python
 * FastAPI
-* SQLAlchemy ORM
+* mysql-connector-python
 * Pydantic
 
 ### Database
 
-* PostgreSQL or
 * MySQL 
 
 ### Frontend
@@ -99,13 +97,6 @@ The schema enforces **foreign key constraints** to maintain data consistency acr
 * HTML
 * CSS
 * JavaScript
-
-### Additional Tools
-
-* Uvicorn (ASGI server)
-* JWT-based authentication
-* RESTful API documentation via Swagger UI
-
 
 ## Project Structure
 
