@@ -83,3 +83,4 @@ CREATE TABLE medication (
 
     FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
 );
+

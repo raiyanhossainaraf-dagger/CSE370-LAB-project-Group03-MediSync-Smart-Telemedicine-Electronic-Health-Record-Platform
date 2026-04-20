@@ -1,3 +1,5 @@
+# app/utils/dependencies.py
+
 from app.utils.database import SessionLocal
 
 def get_db():

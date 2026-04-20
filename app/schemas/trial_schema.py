@@ -1,3 +1,5 @@
+# app/schemas/trial_schema.py
+
 from pydantic import BaseModel
 from datetime import date
 
@@ -15,4 +17,4 @@ class TrialResponse(TrialCreate):
     trial_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

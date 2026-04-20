@@ -1,3 +1,5 @@
+# app/models/trial_model.py
+
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from app.utils.database import Base
 
@@ -5,8 +7,8 @@ class Trial(Base):
     __tablename__ = "trial"
 
     trial_id = Column(Integer, primary_key=True, index=True)
-    trial_name = Column(String(150))
-    drug_name = Column(String(100))
+    trial_name = Column(String(150), nullable=False)
+    drug_name = Column(String(100), nullable=False)
     phase = Column(String(20))
     start_date = Column(Date)
     end_date = Column(Date)
