@@ -1,10 +1,49 @@
 USE clinical_trial_db;
+-- SHOW ALL TABLES
+SHOW TABLES;
 
--- Show all trials
+-- DESCRIBE ALL TABLES
+
+
+DESCRIBE researcher;
+
+DESCRIBE admin_sponsor;
+
+DESCRIBE participant;
+
+DESCRIBE trial;
+
+DESCRIBE eligibility_criteria;
+
+DESCRIBE enrollment;
+
+DESCRIBE observation;
+
+DESCRIBE medication;
+
+DESCRIBE side_effect;
+
+
+-- OPTIONAL: VIEW ALL DATA
+
+
+SELECT * FROM researcher;
+
+SELECT * FROM admin_sponsor;
+
+SELECT * FROM participant;
+
 SELECT * FROM trial;
 
--- Show all participants
-SELECT * FROM participant;
+SELECT * FROM eligibility_criteria;
+
+SELECT * FROM enrollment;
+
+SELECT * FROM observation;
+
+SELECT * FROM medication;
+
+SELECT * FROM side_effect;
 
 -- Show enrollments
 SELECT p.name, t.trial_name, e.status
