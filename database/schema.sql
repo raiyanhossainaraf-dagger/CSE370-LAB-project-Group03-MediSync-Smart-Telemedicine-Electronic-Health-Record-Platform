@@ -5,14 +5,13 @@ CREATE TABLE researcher (
     researcher_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     specialization VARCHAR(100),
-    contact VARCHAR(20),
     email VARCHAR(100) UNIQUE
 );
 
 CREATE TABLE admin_sponsor (
     admin_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
-    role VARCHAR(50)
+    email VARCHAR(100) UNIQUE
 );
 
 CREATE TABLE participant (
@@ -20,8 +19,7 @@ CREATE TABLE participant (
     name VARCHAR(100),
     age INT,
     gender VARCHAR(10),
-    medical_history TEXT,
-    allergy_info TEXT
+    medical_history TEXT
 );
 
 CREATE TABLE trial (
@@ -80,7 +78,18 @@ CREATE TABLE medication (
     drug_name VARCHAR(100),
     dosage VARCHAR(50),
     frequency VARCHAR(50),
+    researcher_id INT,
 
+    FOREIGN KEY (researcher_id) REFERENCES researcher(researcher_id),
     FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
 );
 
+CREATE TABLE side_effect (
+    effect_id INT AUTO_INCREMENT PRIMARY KEY,
+    trial_id INT,
+    effect_type VARCHAR(100),
+    severity VARCHAR(20),
+    duration INT,
+
+    FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
+);
