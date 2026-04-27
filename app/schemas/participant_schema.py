@@ -7,7 +7,6 @@ class ParticipantCreate(BaseModel):
     age: int
     gender: str
     medical_history: str
-    allergy_info: str
 
 class ParticipantResponse(ParticipantCreate):
     participant_id: int

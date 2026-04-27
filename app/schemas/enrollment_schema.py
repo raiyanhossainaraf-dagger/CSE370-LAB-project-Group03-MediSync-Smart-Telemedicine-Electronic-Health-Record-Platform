@@ -14,3 +14,6 @@ class EnrollmentResponse(EnrollmentCreate):
 
     class Config:
         from_attributes = True
+
+class EnrollmentAction(BaseModel):
+    enrollment_id: int

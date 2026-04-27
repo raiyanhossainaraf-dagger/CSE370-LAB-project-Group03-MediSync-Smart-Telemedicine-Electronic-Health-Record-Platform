@@ -9,5 +9,4 @@ class Researcher(Base):
     researcher_id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
     specialization = Column(String(100))
-    contact = Column(String(20))
     email = Column(String(100), unique=True)

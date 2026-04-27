@@ -1,24 +1,36 @@
-<!-- frontend/index.html -->
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clinical Trial Management System</title>
-<link rel="stylesheet" href="css/style.css">
+    <title>CTMS Home</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Clinical Trial Management System</h1>
-    <p>Welcome to Clinical Trial Management Platform</p>
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="index.html" class="active">Home</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
+</div>
 
-    <div class="menu">
-        <a href="login.html">Login</a>
-        <a href="trials.html">Trials</a>
-        <a href="reports.html">Reports</a>
+<div class="main">
+
+    <div class="topbar">
+        <h1>Clinical Trial Management System</h1>
     </div>
+
+    <div class="card">
+        <h2>Welcome</h2>
+        <p>Manage Trials, Participants & Research Data Efficiently.</p>
+
+        <br>
+
+        <a class="btn" href="trials.html">View Trials</a>
+        <a class="btn" href="reports.html">View Reports</a>
+        <a class="btn" href="login.html">Login</a>
+    </div>
+
 </div>
 
 </body>

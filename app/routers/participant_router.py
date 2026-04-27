@@ -1,20 +1,16 @@
-# app/routers/participant_router.py
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
-from fastapi import APIRouter
-from app.core.roles import PARTICIPANT
+from app.utils.database import get_db
+from app.models.enrollment_model import Enrollment
 
 router = APIRouter(prefix="/participants", tags=["Participants"])
 
-@router.get("/")
-def participant_dashboard():
-    return {
-        "role": PARTICIPANT,
-        "message": "Welcome Participant"
-    }
 
-@router.get("/profile")
-def profile():
-    return {
-        "role": PARTICIPANT,
-        "message": "Participant profile"
-    }
+@router.get("/enrolled/{participant_id}")
+def get_enrolled_trials(participant_id: int, db: Session = Depends(get_db)):
+    enrollments = db.query(Enrollment).filter(
+        Enrollment.participant_id == participant_id
+    ).all()
+
+    return enrollments

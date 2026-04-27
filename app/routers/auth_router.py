@@ -1,36 +1,45 @@
-# app/routers/auth_router.py
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
-from fastapi import APIRouter
-from app.core.roles import ADMIN, RESEARCHER, PARTICIPANT
-from app.schemas.user_schema import UserLogin
+from app.utils.database import get_db
+from app.models.admin_model import AdminSponsor
+from app.models.researcher_model import Researcher
+from app.models.participant_model import Participant
 
-router = APIRouter(prefix="/auth", tags=["Authentication"])
+router = APIRouter(prefix="/auth", tags=["Auth"])
+
 
 @router.post("/login")
-def login(user: UserLogin):
-    if user.username == "admin":
+def login(data: dict, db: Session = Depends(get_db)):
+
+    username = data.get("username")
+
+    # Check Admin
+    admin = db.query(AdminSponsor).filter(AdminSponsor.name == username).first()
+
+    if admin:
         return {
-            "message": "Login successful",
-            "role": ADMIN
+            "role": "admin",
+            "user_id": admin.admin_id,
+            "name": admin.name
         }
 
-    elif user.username == "researcher":
+    # Check Researcher
+    researcher = db.query(Researcher).filter(Researcher.name == username).first()
+    if researcher:
         return {
-            "message": "Login successful",
-            "role": RESEARCHER
+            "role": "researcher",
+            "user_id": researcher.researcher_id,
+            "name": researcher.name
         }
 
-    elif user.username == "participant":
+    # Check Participant
+    participant = db.query(Participant).filter(Participant.name == username).first()
+    if participant:
         return {
-            "message": "Login successful",
-            "role": PARTICIPANT
+            "role": "participant",
+            "user_id": participant.participant_id,
+            "name": participant.name
         }
 
-    return {
-        "message": "Invalid credentials"
-    }
-
-
-@router.post("/logout")
-def logout():
-    return {"message": "Logout successful"}
+    raise HTTPException(status_code=401, detail="Invalid user")

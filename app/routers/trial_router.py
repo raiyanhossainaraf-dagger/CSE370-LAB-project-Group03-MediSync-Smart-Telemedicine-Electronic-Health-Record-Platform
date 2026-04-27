@@ -25,3 +25,18 @@ def create_trial(trial: TrialCreate, db: Session = Depends(get_db)):
         "status": ACTIVE,
         "data": new_trial
     }
+
+from fastapi import HTTPException
+
+@router.delete("/{trial_id}")
+def delete_trial(trial_id: int, db: Session = Depends(get_db)):
+
+    trial = db.query(Trial).filter(Trial.trial_id == trial_id).first()
+
+    if not trial:
+        raise HTTPException(status_code=404, detail="Trial not found")
+
+    db.delete(trial)
+    db.commit()
+
+    return {"message": f"Trial {trial_id} deleted successfully"}

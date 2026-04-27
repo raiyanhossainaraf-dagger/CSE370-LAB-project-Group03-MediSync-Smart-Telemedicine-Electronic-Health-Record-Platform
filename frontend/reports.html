@@ -1,25 +1,42 @@
-<!-- frontend/reports.html -->
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>Reports</title>
-<link rel="stylesheet" href="css/style.css">
+    <title>Reports Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<div class="container">
-<h1>System Reports</h1>
-
-<ul>
-<li>Total Trials: 5</li>
-<li>Total Participants: 5</li>
-<li>Total Researchers: 5</li>
-<li>Approved Enrollments: 3</li>
-</ul>
-
-<a href="index.html">Home</a>
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="index.html">Home</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html" class="active">Reports</a>
 </div>
+
+<div class="main">
+
+    <div class="topbar">
+        <h1>Reports Dashboard</h1>
+    </div>
+
+    <div class="cards">
+
+        <div class="stat-card">
+            <h3>Total Trials</h3>
+            <p id="trials">Loading...</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Participants</h3>
+            <p id="participants">Loading...</p>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/report.js"></script>
 
 </body>
 </html>

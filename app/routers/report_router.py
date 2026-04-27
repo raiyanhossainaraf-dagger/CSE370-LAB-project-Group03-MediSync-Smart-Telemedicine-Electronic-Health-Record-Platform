@@ -1,13 +1,19 @@
-# app/routers/report_router.py
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
-from fastapi import APIRouter
+from app.utils.database import get_db
+from app.models.trial_model import Trial
+from app.models.participant_model import Participant
 
 router = APIRouter(prefix="/reports", tags=["Reports"])
 
+
 @router.get("/summary")
-def report_summary():
+def get_summary(db: Session = Depends(get_db)):
+    total_trials = db.query(Trial).count()
+    total_participants = db.query(Participant).count()
+
     return {
-        "total_trials": 2,
-        "total_participants": 10,
-        "active_trials": 1
+        "total_trials": total_trials,
+        "total_participants": total_participants
     }

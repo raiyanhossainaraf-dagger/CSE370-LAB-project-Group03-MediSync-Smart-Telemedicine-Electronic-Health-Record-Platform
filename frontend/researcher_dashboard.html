@@ -1,24 +1,50 @@
-<!-- frontend/researcher_dashboard.html -->
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>Researcher Dashboard</title>
-<link rel="stylesheet" href="css/style.css">
+    <title>Researcher Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<div class="container">
-<h1>Researcher Dashboard</h1>
-
-<ul>
-<li>Assigned Trials</li>
-<li>Add Observations</li>
-<li>Update Medications</li>
-</ul>
-
-<a href="index.html">Home</a>
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="index.html">Home</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
+    <a class="active">Researcher</a>
 </div>
+
+<div class="main">
+
+    <div class="topbar">
+        <h1>Researcher Dashboard</h1>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="card">
+        <h2>Your Trials & Participants</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Trial</th>
+                    <th>Phase</th>
+                    <th>Participant</th>
+                    <th>Age</th>
+                    <th>Sex</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>

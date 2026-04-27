@@ -1,25 +1,51 @@
-<!-- frontend/admin_dashboard.html -->
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Dashboard</title>
-<link rel="stylesheet" href="css/style.css">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<div class="container">
-<h1>Admin Dashboard</h1>
-
-<ul>
-<li>Total Trials</li>
-<li>Manage Researchers</li>
-<li>Manage Participants</li>
-<li>Generate Reports</li>
-</ul>
-
-<a href="index.html">Home</a>
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="index.html">Home</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
+    <a class="active">Admin</a>
 </div>
+
+<div class="main">
+
+    <div class="topbar">
+        <h1>Admin Dashboard</h1>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="card">
+        <h2>All Enrollments Overview</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Participant</th>
+                    <th>Trial</th>
+                    <th>Phase</th>
+                    <th>Status</th>
+                    <th>Researcher</th>
+                </tr>
+            </thead>
+
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="js/main.js"></script>
+<script>
+    loadAdminDashboard();
+</script>
 
 </body>
 </html>

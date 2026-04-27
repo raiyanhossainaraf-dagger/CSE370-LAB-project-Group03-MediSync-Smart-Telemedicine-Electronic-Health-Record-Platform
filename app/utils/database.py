@@ -20,3 +20,10 @@ SessionLocal = sessionmaker(
 
 # Base Class for Models
 Base = declarative_base()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

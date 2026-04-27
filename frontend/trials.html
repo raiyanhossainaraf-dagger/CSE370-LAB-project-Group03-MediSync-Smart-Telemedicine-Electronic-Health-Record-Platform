@@ -1,32 +1,43 @@
-<!-- frontend/trials.html -->
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>Trials</title>
-<link rel="stylesheet" href="css/style.css">
+    <title>Trials Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<div class="container">
-<h1>Available Trials</h1>
-
-<table border="1">
-<tr>
-<th>ID</th>
-<th>Trial Name</th>
-<th>Drug</th>
-<th>Phase</th>
-</tr>
-
-<tr><td>1</td><td>Heart Recovery Trial</td><td>CardioPlus</td><td>Phase I</td></tr>
-<tr><td>2</td><td>Cancer Immunity Study</td><td>OncoSafe</td><td>Phase II</td></tr>
-<tr><td>3</td><td>Brain Memory Test</td><td>NeuroMax</td><td>Phase I</td></tr>
-
-</table>
-
-<a href="index.html">Home</a>
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="index.html">Home</a>
+    <a href="trials.html" class="active">Trials</a>
+    <a href="reports.html">Reports</a>
 </div>
+
+<div class="main">
+
+    <div class="topbar">
+        <h1>Clinical Trials</h1>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Drug</th>
+                    <th>Phase</th>
+                </tr>
+            </thead>
+
+            <tbody id="trialTable"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="js/trials.js"></script>
 
 </body>
 </html>

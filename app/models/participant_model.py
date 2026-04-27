@@ -11,4 +11,3 @@ class Participant(Base):
     age = Column(Integer)
     gender = Column(String(10))
     medical_history = Column(Text)
-    allergy_info = Column(Text)
