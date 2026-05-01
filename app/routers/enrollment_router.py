@@ -62,3 +62,26 @@ def pending_enrollment(enrollment_id: int, db: Session = Depends(get_db)):
     db.commit()
 
     return {"message": "Enrollment set to pending"}
+
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from app.utils.database import get_db
+from app.models.enrollment_model import Enrollment
+
+router = APIRouter(prefix="/enrollment", tags=["Enrollment"])
+
+
+@router.put("/update-status/{enrollment_id}")
+def update_status(enrollment_id: int, status: str, db: Session = Depends(get_db)):
+
+    enrollment = db.query(Enrollment).filter(
+        Enrollment.enrollment_id == enrollment_id
+    ).first()
+
+    if not enrollment:
+        raise HTTPException(status_code=404, detail="Enrollment not found")
+
+    enrollment.status = status
+    db.commit()
+
+    return {"message": "Status updated"}

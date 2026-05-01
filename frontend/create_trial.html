@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Trial</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="admin_dashboard.html">Dashboard</a>
+    <a class="active">Create Trial</a>
+</div>
+
+<div class="main">
+
+    <div class="topbar">
+        <h1>Create New Trial</h1>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="card form-card">
+
+        <div class="form-group">
+            <label>Trial Name</label>
+            <input id="trialName" placeholder="Enter trial name">
+        </div>
+
+        <div class="form-group">
+            <label>Phase</label>
+            <input id="trialPhase" placeholder="Phase I / II / III">
+        </div>
+
+        <div class="form-group">
+            <label>Researcher ID</label>
+            <input id="researcherId" placeholder="Enter researcher ID">
+        </div>
+
+        <div class="form-group">
+            <label>Participant IDs</label>
+            <input id="participants" placeholder="e.g. 1,2,3">
+        </div>
+
+        <button class="btn primary" onclick="createTrial()">Create Trial</button>
+
+    </div>
+
+</div>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>

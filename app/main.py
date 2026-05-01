@@ -26,7 +26,7 @@ app.add_middleware(
 )
 
 # =========================
-# Import all models
+# Import all models (IMPORTANT)
 # =========================
 from app.models import admin_model
 from app.models import researcher_model
@@ -44,7 +44,7 @@ from app.models import side_effect_model
 Base.metadata.create_all(bind=engine)
 
 # =========================
-# Import all routers
+# Import all routers (CLEAN)
 # =========================
 from app.routers import (
     auth_router,
@@ -54,11 +54,12 @@ from app.routers import (
     trial_router,
     enrollment_router,
     report_router,
-    side_effect_router
+    side_effect_router,
+    dashboard_router   # ✅ IMPORTANT
 )
 
 # =========================
-# Include routers
+# Include routers (NO DUPLICATES)
 # =========================
 app.include_router(auth_router.router)
 app.include_router(admin_router.router)
@@ -68,6 +69,7 @@ app.include_router(trial_router.router)
 app.include_router(enrollment_router.router)
 app.include_router(report_router.router)
 app.include_router(side_effect_router.router)
+app.include_router(dashboard_router.router)  # ✅ IMPORTANT
 
 # =========================
 # Root endpoint
@@ -79,7 +81,3 @@ def home():
         "version": settings.APP_VERSION,
         "status": "Backend running successfully"
     }
-
-from app.routers import dashboard_router
-
-app.include_router(dashboard_router.router)

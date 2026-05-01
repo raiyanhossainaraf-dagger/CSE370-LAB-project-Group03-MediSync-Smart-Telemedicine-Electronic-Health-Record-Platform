@@ -16,11 +16,10 @@ INSERT INTO researcher (name, specialization, email) VALUES
 -- ==========================================
 
 INSERT INTO admin_sponsor (name, email) VALUES
-('John Sponsor', 'john@gmail.com'),
+('Dagger', 'dagger@gmail.com'),
 ('Maria Admin', 'maria@gmail.com'),
-('David Lee', 'david@gmail.com'),
-('Samantha Roy', 'sam@gmail.com'),
-('Michael Tan', 'michael@gmail.com');
+('Rafid', 'rafid@gmail.com'),
+('Nafiz', 'nafiz@gmail.com');
 
 -- ==========================================
 -- SAMPLE DATA FOR PARTICIPANT
@@ -29,7 +28,7 @@ INSERT INTO admin_sponsor (name, email) VALUES
 INSERT INTO participant (name, age, gender, medical_history) VALUES
 ('Rafi Islam', 28, 'Male', 'Hypertension'),
 ('Nadia Akter', 35, 'Female', 'Diabetes'),
-('Hasan Mahmud', 42, 'Male', 'Asthma'),
+('Mofiz Nafiz', 42, 'Male', 'Asthma'),
 ('Mim Rahman', 31, 'Female', 'Migraine'),
 ('Tanvir Hasan', 26, 'Male', 'No prior disease');
 
@@ -45,7 +44,7 @@ researcher_id, admin_id
 ('Cancer Immunity Study', 'OncoSafe', 'Phase II', '2026-06-01', '2026-12-01', 180, 2, 2),
 ('Brain Memory Test', 'NeuroMax', 'Phase I', '2026-07-01', '2026-10-01', 90, 3, 3),
 ('Skin Allergy Trial', 'DermaHeal', 'Phase III', '2026-08-01', '2027-02-01', 180, 4, 4),
-('Sugar Control Study', 'GlucoFix', 'Phase II', '2026-09-01', '2027-03-01', 180, 5, 5);
+('Sugar Control Study', 'GlucoFix', 'Phase II', '2026-09-01', '2027-03-01', 180, 5, 3);
 
 -- ==========================================
 -- SAMPLE DATA FOR ELIGIBILITY_CRITERIA

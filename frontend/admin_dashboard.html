@@ -7,23 +7,48 @@
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>CTMS</h2>
-    <a href="index.html">Home</a>
+    <a href="admin_dashboard.html" class="active">Dashboard</a>
+    <a href="create_trial.html">Create Trial</a>
     <a href="trials.html">Trials</a>
     <a href="reports.html">Reports</a>
-    <a class="active">Admin</a>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
+    <!-- TOPBAR -->
     <div class="topbar">
         <h1>Admin Dashboard</h1>
-        <button class="btn" onclick="logout()">Logout</button>
+        <div>
+            <input id="searchInput" type="text" placeholder="Search..." style="padding:6px;">
+            <button class="btn" onclick="logout()">Logout</button>
+        </div>
     </div>
 
+    <!-- STATS -->
+    <div class="cards">
+        <div class="stat-card">
+            <h3>Participants</h3>
+            <p id="totalParticipants">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Trials</h3>
+            <p id="totalTrials">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Approved</h3>
+            <p id="approvedCount">0</p>
+        </div>
+    </div>
+
+    <!-- TABLE -->
     <div class="card">
-        <h2>All Enrollments Overview</h2>
+        <h2>Enrollment Overview</h2>
 
         <table>
             <thead>
@@ -33,18 +58,35 @@
                     <th>Phase</th>
                     <th>Status</th>
                     <th>Researcher</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
-            <tbody id="tableBody"></tbody>
+            <tbody id="tableBody">
+                <!-- Data loads dynamically -->
+            </tbody>
         </table>
     </div>
 
 </div>
 
+<!-- SCRIPTS -->
 <script src="js/main.js"></script>
+
 <script>
+    // Load data
     loadAdminDashboard();
+
+    // 🔍 Simple search filter
+    document.getElementById("searchInput").addEventListener("input", function () {
+        const value = this.value.toLowerCase();
+        const rows = document.querySelectorAll("#tableBody tr");
+
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(value) ? "" : "none";
+        });
+    });
 </script>
 
 </body>
