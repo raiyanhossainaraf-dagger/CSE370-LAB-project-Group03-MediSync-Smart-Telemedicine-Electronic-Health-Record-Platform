@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Symptoms</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="participant_dashboard.html">Dashboard</a>
+    <a href="apply_trial.html">Apply Trial</a>
+    <a href="visit_schedule.html">Visit Schedule</a>
+    <a href="report_symptoms.html" class="active">Report Symptoms</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <h1>Report Symptoms</h1>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- ================= FORM ================= -->
+    <div class="card">
+        <h2>Report Symptoms</h2>
+
+        <div class="form-row">
+
+            <!-- 🔥 FIXED: TRIAL DROPDOWN -->
+            <select id="trialSelect">
+                <option value="">Select Trial</option>
+            </select>
+
+            <input id="effectType" placeholder="Effect (e.g. Headache)">
+            <input id="severity" placeholder="Severity (Mild / Moderate / Severe)">
+            <input id="duration" placeholder="Days" type="number">
+
+            <button class="btn primary" onclick="reportEffect()">Submit</button>
+        </div>
+    </div>
+
+    <!-- ================= TABLE ================= -->
+    <div class="card">
+        <h2>Your Reported Symptoms</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Trial</th>
+                    <th>Effect</th>
+                    <th>Severity</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody id="effectsTable"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/main.js"></script>
+
+<script>
+    loadParticipantTrialsForReport();   // 🔥 load dropdown
+    loadReportedEffects();              // 🔥 load previous reports
+</script>
+
+</body>
+</html>

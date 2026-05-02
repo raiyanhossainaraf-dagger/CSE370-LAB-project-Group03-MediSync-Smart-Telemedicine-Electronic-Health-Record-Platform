@@ -40,16 +40,17 @@ Separate functionalities are provided for Admin, Researcher, and Participant use
 
 ### Admin
 - Manage users and system access
-- Approve and monitor trials
+- Creating clinical trials
+- Managing clinical trials
 - Generate reports and analytics
-- Review adverse event summaries
+- Manages researchers and participants
 
 ### Researcher
-- Create and manage clinical trials
-- Define eligibility criteria
-- Enroll participants
+- Administrating medications
 - Record observations and trial progress
 - Submit final trial reports
+- Creating eligibility criteria 
+- Observing real time reported side effects 
 
 ### Participant
 - Apply for available trials
@@ -68,7 +69,6 @@ Separate functionalities are provided for Admin, Researcher, and Participant use
 - Eligibility Verification
 - Observation Recording
 - Medication Management
-- Adverse Event Reporting
 - Reporting & Analytics
 
 ---

@@ -6,23 +6,25 @@ from app.models.enrollment_model import Enrollment
 from app.models.participant_model import Participant
 from app.models.trial_model import Trial
 from app.models.researcher_model import Researcher
+from app.models.report_model import Report
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
 
-# ================= ADMIN DASHBOARD (OPTIONAL) =================
+# ================= ADMIN DASHBOARD =================
 @router.get("/info")
 def get_admin_dashboard(db: Session = Depends(get_db)):
 
     data = (
         db.query(
+            Enrollment.enrollment_id,  # 🔥 ADDED (DO NOT REMOVE)
             Participant.name.label("participant"),
             Trial.trial_name.label("trial"),
             Trial.phase.label("phase"),
             Enrollment.status.label("status"),
             Researcher.name.label("researcher")
         )
-        .join(Enrollment, Enrollment.participant_id == Participant.participant_id)
+        .join(Participant, Participant.participant_id == Enrollment.participant_id)
         .join(Trial, Trial.trial_id == Enrollment.trial_id)
         .join(Researcher, Researcher.researcher_id == Trial.researcher_id)
         .all()
@@ -30,14 +32,60 @@ def get_admin_dashboard(db: Session = Depends(get_db)):
 
     return [
         {
-            "participant": row.participant,
-            "trial": row.trial,
-            "phase": row.phase,
-            "status": row.status,
-            "researcher": row.researcher
+            "id": row[0],  # 🔥 REQUIRED for buttons
+            "participant": row[1],
+            "trial": row[2],
+            "phase": row[3],
+            "status": row[4],
+            "researcher": row[5]
         }
         for row in data
     ]
+
+
+# ================= APPROVE ENROLLMENT =================
+@router.put("/approve/{id}")
+def approve_enrollment(id: int, db: Session = Depends(get_db)):
+
+    e = db.query(Enrollment).filter(Enrollment.enrollment_id == id).first()
+
+    if not e:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    e.status = "Approved"
+    db.commit()
+
+    return {"message": "Approved"}
+
+
+# ================= REJECT ENROLLMENT =================
+@router.put("/reject/{id}")
+def reject_enrollment(id: int, db: Session = Depends(get_db)):
+
+    e = db.query(Enrollment).filter(Enrollment.enrollment_id == id).first()
+
+    if not e:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    e.status = "Rejected"
+    db.commit()
+
+    return {"message": "Rejected"}
+
+
+# ================= DELETE ENROLLMENT =================
+@router.delete("/delete-enrollment/{id}")
+def delete_enrollment(id: int, db: Session = Depends(get_db)):
+
+    e = db.query(Enrollment).filter(Enrollment.enrollment_id == id).first()
+
+    if not e:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    db.delete(e)
+    db.commit()
+
+    return {"message": "Deleted"}
 
 
 # ================= CREATE TRIAL =================
@@ -94,7 +142,6 @@ def delete_trial(trial_id: int, db: Session = Depends(get_db)):
     if not trial:
         raise HTTPException(status_code=404, detail="Trial not found")
 
-    # Delete related enrollments first
     db.query(Enrollment).filter(Enrollment.trial_id == trial_id).delete()
 
     db.delete(trial)
@@ -135,6 +182,8 @@ def get_participants(db: Session = Depends(get_db)):
         for p in data
     ]
 
+
+# ================= ADD RESEARCHER =================
 @router.post("/add-researcher")
 def add_researcher(data: dict, db: Session = Depends(get_db)):
 
@@ -149,6 +198,8 @@ def add_researcher(data: dict, db: Session = Depends(get_db)):
 
     return {"message": "Researcher added"}
 
+
+# ================= DELETE RESEARCHER =================
 @router.delete("/delete-researcher/{id}")
 def delete_researcher(id: int, db: Session = Depends(get_db)):
 
@@ -159,7 +210,6 @@ def delete_researcher(id: int, db: Session = Depends(get_db)):
     if not researcher:
         raise HTTPException(status_code=404, detail="Not found")
 
-    # Prevent delete if assigned to trials
     trial_exists = db.query(Trial).filter(
         Trial.researcher_id == id
     ).first()
@@ -172,6 +222,8 @@ def delete_researcher(id: int, db: Session = Depends(get_db)):
 
     return {"message": "Researcher deleted"}
 
+
+# ================= ADD PARTICIPANT =================
 @router.post("/add-participant")
 def add_participant(data: dict, db: Session = Depends(get_db)):
 
@@ -187,6 +239,8 @@ def add_participant(data: dict, db: Session = Depends(get_db)):
 
     return {"message": "Participant added"}
 
+
+# ================= DELETE PARTICIPANT =================
 @router.delete("/delete-participant/{id}")
 def delete_participant(id: int, db: Session = Depends(get_db)):
 
@@ -208,3 +262,23 @@ def delete_participant(id: int, db: Session = Depends(get_db)):
     db.commit()
 
     return {"message": "Participant deleted"}
+
+@router.get("/reports")
+def get_reports(db: Session = Depends(get_db)):
+    return db.query(Report).all()
+
+
+@router.put("/report/approve/{id}")
+def approve_report(id: int, db: Session = Depends(get_db)):
+    r = db.query(Report).filter(Report.report_id == id).first()
+    r.status = "Approved"
+    db.commit()
+    return {"message": "Approved"}
+
+
+@router.put("/report/reject/{id}")
+def reject_report(id: int, db: Session = Depends(get_db)):
+    r = db.query(Report).filter(Report.report_id == id).first()
+    r.status = "Rejected"
+    db.commit()
+    return {"message": "Rejected"}

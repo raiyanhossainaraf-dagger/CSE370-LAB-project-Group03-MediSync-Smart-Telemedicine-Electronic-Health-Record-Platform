@@ -9,10 +9,12 @@
 
 <div class="sidebar">
     <h2>CTMS</h2>
-    <a href="index.html">Home</a>
+    <a href="researcher_medication.html">Administrating Medication</a>
+    <a href="record_observation.html">Record Observation</a>
+    <a href="submit_final_report.html">Final Report</a>
     <a href="trials.html">Trials</a>
     <a href="reports.html">Reports</a>
-    <a class="active">Researcher</a>
+
 </div>
 
 <div class="main">
@@ -31,20 +33,56 @@
                     <th>Trial</th>
                     <th>Phase</th>
                     <th>Participant</th>
-                    <th>Age</th>
-                    <th>Sex</th>
                     <th>Status</th>
                 </tr>
             </thead>
 
-            <tbody id="tableBody"></tbody>
+            <!-- ✅ FIXED ID -->
+            <tbody id="researcher-table"></tbody>
         </table>
     </div>
 
+    <div class="card">
+    <h2>Reported Side Effects</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Participant</th>
+                <th>Trial</th>
+                <th>Effect</th>
+                <th>Severity</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody id="researcherEffects"></tbody>
+    </table>
 </div>
 
+    <div class="card">
+        <h2>Eligibility Criteria</h2>
+
+        <input id="eTrial" placeholder="Trial ID">
+        <input id="minAge" placeholder="Min Age">
+        <input id="maxAge" placeholder="Max Age">
+        <input id="condition" placeholder="Condition">
+
+        <textarea id="exclusions" placeholder="Exclusions"></textarea>
+
+        <button class="btn primary" onclick="addCriteria()">Save</button>
+</div>
+
+</div>
+
+
+<!-- ✅ ONLY THIS SCRIPT -->
 <script src="js/main.js"></script>
-<script src="js/dashboard.js"></script>
+
+<!-- ✅ CALL FUNCTION -->
+<script>
+    loadResearcherDashboard();
+    loadResearcherEffects();
+</script>
 
 </body>
 </html>

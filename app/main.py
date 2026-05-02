@@ -55,9 +55,9 @@ from app.routers import (
     enrollment_router,
     report_router,
     side_effect_router,
-    dashboard_router   # ✅ IMPORTANT
-)
+    dashboard_router
 
+)
 # =========================
 # Include routers (NO DUPLICATES)
 # =========================

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Record Observation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="researcher_medication.html">Administrating Medication</a>
+    <a href="record_observation.html">Record Observation</a>
+    <a href="submit_final_report.html">Final Report</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
+
+<div class="card">
+<h2>Record Observation</h2>
+
+<div class="form-row">
+    <input id="obsTrial" placeholder="Trial ID">
+    <input id="obsParticipant" placeholder="Participant ID">
+    <input id="visitDate" type="date">
+    <input id="bp" placeholder="Blood Pressure">
+    <input id="temp" placeholder="Temperature">
+</div>
+
+<textarea id="notes" placeholder="Clinical notes"></textarea>
+
+<button class="btn primary" onclick="addObservation()">Save</button>
+</div>
+</body>
+</html>

@@ -93,3 +93,24 @@ CREATE TABLE side_effect (
 
     FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
 );
+
+CREATE TABLE report (
+    report_id INT AUTO_INCREMENT PRIMARY KEY,
+    trial_id INT NOT NULL,
+    researcher_id INT NOT NULL,
+    summary TEXT NOT NULL,
+    result TEXT NOT NULL,
+    image VARCHAR(255),
+    status VARCHAR(20) DEFAULT 'Pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (trial_id) REFERENCES trial(trial_id),
+    FOREIGN KEY (researcher_id) REFERENCES researcher(researcher_id)
+);
+
+ALTER TABLE side_effect
+ADD participant_id INT;
+
+ALTER TABLE side_effect
+ADD FOREIGN KEY (participant_id) REFERENCES participant(participant_id);
+

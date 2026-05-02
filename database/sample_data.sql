@@ -105,3 +105,8 @@ INSERT INTO side_effect (trial_id, effect_type, severity, duration) VALUES
 (3, 'Dizziness', 'Mild', 1),
 (4, 'Skin Rash', 'Severe', 7),
 (5, 'Fatigue', 'Moderate', 5);
+
+INSERT INTO report (trial_id, researcher_id, summary, result, status)
+VALUES
+(8, 7, 'Initial Trial Summary', 'Drug shows promising effects', 'Pending'),
+(8, 7, 'Final Report', 'Significant improvement observed', 'Approved');

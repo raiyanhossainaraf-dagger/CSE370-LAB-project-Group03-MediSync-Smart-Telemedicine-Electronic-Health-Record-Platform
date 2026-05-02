@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visit Schedule</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="participant_dashboard.html">Dashboard</a>
+    <a href="apply_trial.html">Apply Trial</a>
+    <a href="visit_schedule.html" class="active">Visit Schedule</a>
+    <a href="report_symptoms.html">Report Symptoms</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="topbar">
+        <h1>Visit Schedule</h1>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="card">
+        <h2>Your Upcoming Visits</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Trial</th>
+                    <th>Visit Date</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+
+            <tbody id="scheduleTable"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="js/main.js"></script>
+
+<script>
+    loadVisitSchedule();
+</script>
+
+</body>
+</html>

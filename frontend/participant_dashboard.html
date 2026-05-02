@@ -9,10 +9,12 @@
 
 <div class="sidebar">
     <h2>CTMS</h2>
-    <a href="index.html">Home</a>
+    <a href="participant_dashboard.html" class="active">Dashboard</a>
+    <a href="apply_trial.html">Apply Trial</a>
+    <a href="visit_schedule.html">Visit Schedule</a>
+    <a href="report_symptoms.html">Report Symptoms</a>
     <a href="trials.html">Trials</a>
     <a href="reports.html">Reports</a>
-    <a class="active">Participant</a>
 </div>
 
 <div class="main">
@@ -22,8 +24,9 @@
         <button class="btn" onclick="logout()">Logout</button>
     </div>
 
+    <!-- ENROLLMENTS -->
     <div class="card">
-        <h2>Your Enrolled Trials</h2>
+        <h2>Your Enrollments</h2>
 
         <table>
             <thead>
@@ -33,15 +36,34 @@
                     <th>Status</th>
                 </tr>
             </thead>
+            <tbody id="participant-table"></tbody>
+        </table>
+    </div>
 
-            <tbody id="tableBody"></tbody>
+    <!-- MEDICATION -->
+    <div class="card">
+        <h2>Your Medications</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Drug</th>
+                    <th>Dosage</th>
+                    <th>Frequency</th>
+                </tr>
+            </thead>
+            <tbody id="medicationTable"></tbody>
         </table>
     </div>
 
 </div>
 
 <script src="js/main.js"></script>
-<script src="js/dashboard.js"></script>
+
+<script>
+    loadParticipantDashboard();
+    loadMedications();
+</script>
 
 </body>
 </html>

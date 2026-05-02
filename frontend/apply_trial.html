@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apply Trial</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>CTMS</h2>
+    <a href="participant_dashboard.html">Dashboard</a>
+    <a href="apply_trial.html" class="active">Apply Trial</a>
+    <a href="visit_schedule.html">Visit Schedule</a>
+    <a href="report_symptoms.html">Report Symptoms</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <h1>Apply for Trial</h1>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- APPLY FORM -->
+    <div class="card">
+        <h2>Apply for Trial</h2>
+
+        <div class="form-row">
+            <input id="applyTrialId" placeholder="Enter Trial ID">
+            <button class="btn primary" onclick="applyTrial()">Apply</button>
+        </div>
+    </div>
+
+    <!-- AVAILABLE TRIALS -->
+    <div class="card">
+        <h2>Available Trials</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Trial Name</th>
+                    <th>Phase</th>
+                </tr>
+            </thead>
+
+            <tbody id="availableTrials"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/main.js"></script>
+
+<script>
+    loadAvailableTrials();
+</script>
+
+</body>
+</html>
