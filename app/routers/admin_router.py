@@ -134,3 +134,77 @@ def get_participants(db: Session = Depends(get_db)):
         }
         for p in data
     ]
+
+@router.post("/add-researcher")
+def add_researcher(data: dict, db: Session = Depends(get_db)):
+
+    new_researcher = Researcher(
+        name=data.get("name"),
+        specialization=data.get("specialization"),
+        email=data.get("email")
+    )
+
+    db.add(new_researcher)
+    db.commit()
+
+    return {"message": "Researcher added"}
+
+@router.delete("/delete-researcher/{id}")
+def delete_researcher(id: int, db: Session = Depends(get_db)):
+
+    researcher = db.query(Researcher).filter(
+        Researcher.researcher_id == id
+    ).first()
+
+    if not researcher:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    # Prevent delete if assigned to trials
+    trial_exists = db.query(Trial).filter(
+        Trial.researcher_id == id
+    ).first()
+
+    if trial_exists:
+        raise HTTPException(status_code=400, detail="Researcher assigned to a trial")
+
+    db.delete(researcher)
+    db.commit()
+
+    return {"message": "Researcher deleted"}
+
+@router.post("/add-participant")
+def add_participant(data: dict, db: Session = Depends(get_db)):
+
+    new_participant = Participant(
+        name=data.get("name"),
+        age=data.get("age"),
+        gender=data.get("gender"),
+        medical_history=data.get("medical_history")
+    )
+
+    db.add(new_participant)
+    db.commit()
+
+    return {"message": "Participant added"}
+
+@router.delete("/delete-participant/{id}")
+def delete_participant(id: int, db: Session = Depends(get_db)):
+
+    participant = db.query(Participant).filter(
+        Participant.participant_id == id
+    ).first()
+
+    if not participant:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    enrollment_exists = db.query(Enrollment).filter(
+        Enrollment.participant_id == id
+    ).first()
+
+    if enrollment_exists:
+        raise HTTPException(status_code=400, detail="Participant enrolled in trial")
+
+    db.delete(participant)
+    db.commit()
+
+    return {"message": "Participant deleted"}

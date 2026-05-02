@@ -7,21 +7,40 @@
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>CTMS</h2>
     <a href="admin_dashboard.html">Dashboard</a>
     <a href="create_trial.html">Create Trial</a>
     <a href="researchers.html">Researchers</a>
-    <a class="active">Participants</a>
+    <a href="participants.html">Participants</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
+    <!-- TOPBAR -->
     <div class="topbar">
         <h1>Participants</h1>
         <button class="btn" onclick="logout()">Logout</button>
     </div>
 
+    <!-- ADD PARTICIPANT -->
+    <div class="card">
+        <h2>Add Participant</h2>
+
+        <div class="form-row">
+            <input id="p_name" placeholder="Name">
+            <input id="p_age" placeholder="Age" type="number">
+            <input id="p_gender" placeholder="Gender">
+            <input id="p_history" placeholder="Medical History">
+            <button class="btn" onclick="addParticipant()">Add</button>
+        </div>
+    </div>
+
+    <!-- TABLE -->
     <div class="card">
         <h2>All Participants</h2>
 
@@ -33,16 +52,21 @@
                     <th>Age</th>
                     <th>Gender</th>
                     <th>Medical History</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
-            <tbody id="participantTable"></tbody>
+            <tbody id="participantTable">
+                <!-- Data loads here -->
+            </tbody>
         </table>
     </div>
 
 </div>
 
+<!-- SCRIPTS -->
 <script src="js/main.js"></script>
+
 <script>
     loadParticipants();
 </script>

@@ -1,4 +1,3 @@
-
 // ================= USER AUTH =================
 
 function getUser() {
@@ -23,7 +22,6 @@ function requireAuth() {
 
 function requireRole(role) {
     const user = requireAuth();
-
     if (!user) return null;
 
     if (user.role !== role) {
@@ -76,7 +74,6 @@ function showToast(message) {
     toast.style.zIndex = "9999";
 
     document.body.appendChild(toast);
-
     setTimeout(() => toast.remove(), 2000);
 }
 
@@ -139,107 +136,86 @@ async function loadAdminDashboard() {
 // ================= CREATE TRIAL =================
 
 async function createTrial() {
-
     const trial_name = document.getElementById("trialName").value;
     const phase = document.getElementById("trialPhase").value;
     const researcher_id = parseInt(document.getElementById("researcherId").value);
 
-    const participantsInput = document.getElementById("participants").value;
-
-    const participant_ids = participantsInput
+    const participant_ids = document.getElementById("participants").value
         .split(",")
         .map(id => parseInt(id.trim()))
         .filter(id => !isNaN(id));
 
-    try {
-        const response = await fetch("http://127.0.0.1:8000/admin/create-trial", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                trial_name,
-                phase,
-                researcher_id,
-                participants: participant_ids
-            })
-        });
+    const response = await fetch("http://127.0.0.1:8000/admin/create-trial", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            trial_name,
+            phase,
+            researcher_id,
+            participants: participant_ids
+        })
+    });
 
+    if (!response.ok) {
         const data = await response.json();
-
-        if (!response.ok) {
-            alert(data.detail);
-            return;
-        }
-
-        showToast("Trial created");
-        window.location.href = "admin_dashboard.html";
-
-    } catch (err) {
-        console.error(err);
-        alert("Failed to create trial");
+        alert(data.detail);
+        return;
     }
+
+    showToast("Trial created");
+    window.location.href = "admin_dashboard.html";
 }
 
 
 // ================= UPDATE STATUS =================
 
 async function updateStatus(id, status) {
-    try {
-        const response = await fetch(
-            `http://127.0.0.1:8000/enrollment/update-status/${id}?status=${status}`,
-            { method: "PUT" }
-        );
+    const response = await fetch(
+        `http://127.0.0.1:8000/enrollment/update-status/${id}?status=${status}`,
+        { method: "PUT" }
+    );
 
-        if (!response.ok) throw new Error();
-
-        showToast("Status updated");
-        loadAdminDashboard();
-
-    } catch (err) {
-        console.error(err);
+    if (!response.ok) {
         alert("Update failed");
+        return;
     }
+
+    showToast("Status updated");
+    loadAdminDashboard();
 }
 
 
 // ================= DELETE TRIAL =================
 
 async function deleteTrial(trial_id) {
-
     if (!confirm("Delete this trial?")) return;
 
-    try {
-        const response = await fetch(
-            `http://127.0.0.1:8000/admin/delete-trial/${trial_id}`,
-            { method: "DELETE" }
-        );
+    const response = await fetch(
+        `http://127.0.0.1:8000/admin/delete-trial/${trial_id}`,
+        { method: "DELETE" }
+    );
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (!response.ok) {
-            alert(data.detail);
-            return;
-        }
-
-        showToast("Trial deleted");
-        loadAdminDashboard();
-
-    } catch (err) {
-        console.error(err);
-        alert("Delete failed");
+    if (!response.ok) {
+        alert(data.detail);
+        return;
     }
+
+    showToast("Trial deleted");
+    loadAdminDashboard();
 }
 
 
-// ================= LOAD RESEARCHERS =================
+// ================= RESEARCHERS =================
 
 async function loadResearchers() {
-    const user = requireRole("admin");
-    if (!user) return;
+    requireRole("admin");
 
     const table = document.getElementById("researcherTable");
     if (!table) return;
 
-    table.innerHTML = `<tr><td colspan="4">Loading...</td></tr>`;
+    table.innerHTML = `<tr><td colspan="5">Loading...</td></tr>`;
 
     const data = await fetchData("http://127.0.0.1:8000/admin/researchers");
 
@@ -252,22 +228,69 @@ async function loadResearchers() {
                 <td>${r.name}</td>
                 <td>${r.specialization || "-"}</td>
                 <td>${r.email || "-"}</td>
+                <td>
+                    <button onclick="deleteResearcher(${r.id})" class="btn-delete">Delete</button>
+                </td>
             </tr>
         `;
     });
 }
 
 
-// ================= LOAD PARTICIPANTS =================
+async function addResearcher() {
+    const name = document.getElementById("r_name").value;
+    const specialization = document.getElementById("r_spec").value;
+    const email = document.getElementById("r_email").value;
+
+    if (!name) return alert("Name required");
+
+    const res = await fetch("http://127.0.0.1:8000/admin/add-researcher", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, specialization, email })
+    });
+
+    if (res.ok) {
+        showToast("Researcher added");
+        loadResearchers();
+
+        document.getElementById("r_name").value = "";
+        document.getElementById("r_spec").value = "";
+        document.getElementById("r_email").value = "";
+    } else {
+        alert("Error adding researcher");
+    }
+}
+
+
+async function deleteResearcher(id) {
+    if (!confirm("Delete this researcher?")) return;
+
+    const res = await fetch(`http://127.0.0.1:8000/admin/delete-researcher/${id}`, {
+        method: "DELETE"
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        alert(data.detail);
+        return;
+    }
+
+    showToast("Deleted");
+    loadResearchers();
+}
+
+
+// ================= PARTICIPANTS =================
 
 async function loadParticipants() {
-    const user = requireRole("admin");
-    if (!user) return;
+    requireRole("admin");
 
     const table = document.getElementById("participantTable");
     if (!table) return;
 
-    table.innerHTML = `<tr><td colspan="5">Loading...</td></tr>`;
+    table.innerHTML = `<tr><td colspan="6">Loading...</td></tr>`;
 
     const data = await fetchData("http://127.0.0.1:8000/admin/participants");
 
@@ -281,7 +304,57 @@ async function loadParticipants() {
                 <td>${p.age}</td>
                 <td>${p.gender}</td>
                 <td>${p.medical_history || "-"}</td>
+                <td>
+                    <button onclick="deleteParticipant(${p.id})" class="btn-delete">Delete</button>
+                </td>
             </tr>
         `;
     });
+}
+
+
+async function addParticipant() {
+    const name = document.getElementById("p_name").value;
+    const age = parseInt(document.getElementById("p_age").value);
+    const gender = document.getElementById("p_gender").value;
+    const medical_history = document.getElementById("p_history").value;
+
+    if (!name || !age) return alert("Name and Age required");
+
+    const res = await fetch("http://127.0.0.1:8000/admin/add-participant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, age, gender, medical_history })
+    });
+
+    if (res.ok) {
+        showToast("Participant added");
+        loadParticipants();
+
+        document.getElementById("p_name").value = "";
+        document.getElementById("p_age").value = "";
+        document.getElementById("p_gender").value = "";
+        document.getElementById("p_history").value = "";
+    } else {
+        alert("Error adding participant");
+    }
+}
+
+
+async function deleteParticipant(id) {
+    if (!confirm("Delete this participant?")) return;
+
+    const res = await fetch(`http://127.0.0.1:8000/admin/delete-participant/${id}`, {
+        method: "DELETE"
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        alert(data.detail);
+        return;
+    }
+
+    showToast("Deleted");
+    loadParticipants();
 }

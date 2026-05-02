@@ -7,42 +7,58 @@
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>CTMS</h2>
     <a href="admin_dashboard.html">Dashboard</a>
-    <a class="active">Create Trial</a>
+    <a href="create_trial.html" class="active">Create Trial</a>
+    <a href="researchers.html">Researchers</a>
+    <a href="participants.html">Participants</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
+    <!-- TOPBAR -->
     <div class="topbar">
         <h1>Create New Trial</h1>
         <button class="btn" onclick="logout()">Logout</button>
     </div>
 
-    <div class="card form-card">
+    <!-- CENTERED FORM -->
+    <div class="form-center">
 
-        <div class="form-group">
-            <label>Trial Name</label>
-            <input id="trialName" placeholder="Enter trial name">
+        <div class="form-box">
+
+            <h2>Create Trial</h2>
+
+            <div class="form-group">
+                <label>Trial Name</label>
+                <input id="trialName" placeholder="Enter trial name">
+            </div>
+
+            <div class="form-group">
+                <label>Phase</label>
+                <input id="trialPhase" placeholder="Phase I / II / III">
+            </div>
+
+            <div class="form-group">
+                <label>Researcher ID</label>
+                <input id="researcherId" placeholder="Enter researcher ID">
+            </div>
+
+            <div class="form-group">
+                <label>Participant IDs</label>
+                <input id="participants" placeholder="e.g. 1,2,3">
+            </div>
+
+            <button class="btn primary" onclick="createTrial()">
+                Create Trial
+            </button>
+
         </div>
-
-        <div class="form-group">
-            <label>Phase</label>
-            <input id="trialPhase" placeholder="Phase I / II / III">
-        </div>
-
-        <div class="form-group">
-            <label>Researcher ID</label>
-            <input id="researcherId" placeholder="Enter researcher ID">
-        </div>
-
-        <div class="form-group">
-            <label>Participant IDs</label>
-            <input id="participants" placeholder="e.g. 1,2,3">
-        </div>
-
-        <button class="btn primary" onclick="createTrial()">Create Trial</button>
 
     </div>
 

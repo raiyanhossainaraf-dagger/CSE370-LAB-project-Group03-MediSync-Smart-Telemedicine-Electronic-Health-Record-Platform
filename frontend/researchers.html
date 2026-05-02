@@ -7,21 +7,39 @@
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>CTMS</h2>
     <a href="admin_dashboard.html">Dashboard</a>
     <a href="create_trial.html">Create Trial</a>
-    <a class="active">Researchers</a>
+    <a href="researchers.html">Researchers</a>
     <a href="participants.html">Participants</a>
+    <a href="trials.html">Trials</a>
+    <a href="reports.html">Reports</a>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
+    <!-- TOPBAR -->
     <div class="topbar">
         <h1>Researchers</h1>
         <button class="btn" onclick="logout()">Logout</button>
     </div>
 
+    <!-- ADD RESEARCHER CARD -->
+    <div class="card">
+        <h2>Add Researcher</h2>
+
+        <div class="form-row">
+            <input id="r_name" placeholder="Name">
+            <input id="r_spec" placeholder="Specialization">
+            <input id="r_email" placeholder="Email">
+            <button class="btn" onclick="addResearcher()">Add</button>
+        </div>
+    </div>
+
+    <!-- TABLE -->
     <div class="card">
         <h2>All Researchers</h2>
 
@@ -32,16 +50,21 @@
                     <th>Name</th>
                     <th>Specialization</th>
                     <th>Email</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
-            <tbody id="researcherTable"></tbody>
+            <tbody id="researcherTable">
+                <!-- Data loads here -->
+            </tbody>
         </table>
     </div>
 
 </div>
 
+<!-- SCRIPTS -->
 <script src="js/main.js"></script>
+
 <script>
     loadResearchers();
 </script>
