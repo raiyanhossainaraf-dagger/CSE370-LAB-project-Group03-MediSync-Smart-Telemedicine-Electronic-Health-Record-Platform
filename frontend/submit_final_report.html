@@ -1,33 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Final Report</title>
+    <title>Submit Final Report</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>CTMS</h2>
+    <a href="researcher_dashboard.html">Dashboard</a>
     <a href="researcher_medication.html">Administrating Medication</a>
     <a href="record_observation.html">Record Observation</a>
-    <a href="submit_final_report.html">Final Report</a>
-    <a href="trials.html">Trials</a>
+    <a href="submit_final_report.html" class="active">Final Report</a>
     <a href="reports.html">Reports</a>
+</div>
 
+<!-- MAIN -->
+<div class="main">
 
-    <a class="active">Researcher</a>
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <h1>Submit Final Report</h1>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
 
+    <!-- FORM -->
+    <div class="form-container">
+
+        <div class="form-card">
+            <h2>Final Trial Report</h2>
+
+            <div id="reportMsg" style="margin-bottom: 10px;"></div>
+
+            <!-- 🔥 FIX: number input -->
+            <label>Trial ID</label>
+            <input type="number" id="report_trial" placeholder="Enter Trial ID">
+
+            <label>Summary</label>
+            <textarea id="report_summary" placeholder="Brief summary..."></textarea>
+
+            <label>Final Result</label>
+            <textarea id="report_result" placeholder="Detailed result..."></textarea>
+
+            <button class="btn primary" onclick="submitFinalReport()">
+                Publish Report
+            </button>
+        </div>
+
+    </div>
 
 </div>
-            <div class="card">
-        <h2>Submit Final Report</h2>
 
-        <input id="repTrial" placeholder="Trial ID">
+<script src="js/main.js"></script>
 
-        <textarea id="summary" placeholder="Summary"></textarea>
-        <textarea id="result" placeholder="Final Result"></textarea>
+<script>
 
-        <button class="btn primary" onclick="submitReport()">Submit</button>
-        </div>
-    </div>
+// 🔐 AUTH CHECK ON PAGE LOAD
+document.addEventListener("DOMContentLoaded", () => {
+    const user = checkAuth("researcher");
+    if (!user) return;
+});
+
+
+// ================= SHOW MESSAGE =================
+function showReportMsg(msg, type="success") {
+    const box = document.getElementById("reportMsg");
+    box.innerHTML = msg;
+    box.style.color = type === "success" ? "green" : "red";
+}
+
+
+// ================= SUBMIT REPORT =================
+async function submitFinalReport() {
+
+    const user = checkAuth("researcher");
+    if (!user) return;
+
+    const trial = document.getElementById("report_trial").value;
+    const summary = document.getElementById("report_summary").value;
+    const result = document.getElementById("report_result").value;
+
+    // 🔥 VALIDATION
+    if (!trial || isNaN(trial)) {
+        return showReportMsg("Trial ID must be a valid number", "error");
+    }
+
+    if (!summary || !result) {
+        return showReportMsg("All fields are required", "error");
+    }
+
+    try {
+
+        const res = await fetch("http://127.0.0.1:8000/dashboard/report", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                trial_id: parseInt(trial),
+                researcher_id: parseInt(user.user_id),
+                summary: summary,
+                result: result
+            })
+        });
+
+        // 🔥 HANDLE BACKEND ERRORS
+        if (!res.ok) {
+            const err = await res.text();
+            console.error(err);
+            return showReportMsg("Server error: " + err, "error");
+        }
+
+        const data = await res.json();
+
+        showReportMsg(data.message, "success");
+
+        // ✅ clear form
+        document.getElementById("report_trial").value = "";
+        document.getElementById("report_summary").value = "";
+        document.getElementById("report_result").value = "";
+
+    } catch (err) {
+        console.error(err);
+        showReportMsg("Connection error", "error");
+    }
+}
+
+</script>
+
 </body>
 </html>

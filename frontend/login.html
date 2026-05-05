@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>CTMS Login</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="login-page">
 
-<div class="login-card">
-    <h2>Login</h2>
+<!-- TOPBAR -->
+<div class="topbar login-topbar">
+    <h1>CTMS - Clinical Trial Management System</h1>
+</div>
 
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
+<!-- LOGIN CONTAINER -->
+<div class="login-container">
 
-    <button onclick="login()">Login</button>
+    <div class="login-card">
+
+        <!-- LOGO / TITLE -->
+        <div class="login-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to continue</p>
+        </div>
+
+        <!-- FORM -->
+       <input type="text" id="username" placeholder="Username">
+       <input type="password" id="password" placeholder="Password">
+
+        <button class="btn primary" onclick="login()">Login</button>
+
+        <!-- FOOTER -->
+        <p class="login-footer">© CTMS System</p>
+
+    </div>
+
 </div>
 
 <script src="js/login.js"></script>

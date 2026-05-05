@@ -42,8 +42,9 @@ Separate functionalities are provided for Admin, Researcher, and Participant use
 - Manage users and system access
 - Creating clinical trials
 - Managing clinical trials
-- Generate reports and analytics
+- Adding search function
 - Manages researchers and participants
+- Showing overview of the current CTMS
 
 ### Researcher
 - Administrating medications

@@ -10,3 +10,4 @@ class Researcher(Base):
     name = Column(String(100), nullable=False)
     specialization = Column(String(100))
     email = Column(String(100), unique=True)
+    password = Column(String(255))

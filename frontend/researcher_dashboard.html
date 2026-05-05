@@ -9,10 +9,10 @@
 
 <div class="sidebar">
     <h2>CTMS</h2>
+    <a href="researcher_dashboard.html">Dashboard</a>
     <a href="researcher_medication.html">Administrating Medication</a>
     <a href="record_observation.html">Record Observation</a>
     <a href="submit_final_report.html">Final Report</a>
-    <a href="trials.html">Trials</a>
     <a href="reports.html">Reports</a>
 
 </div>
@@ -37,7 +37,7 @@
                 </tr>
             </thead>
 
-            <!-- ✅ FIXED ID -->
+
             <tbody id="researcher-table"></tbody>
         </table>
     </div>
@@ -60,16 +60,22 @@
 </div>
 
     <div class="card">
-        <h2>Eligibility Criteria</h2>
+    <h2>Eligibility Criteria</h2>
 
-        <input id="eTrial" placeholder="Trial ID">
-        <input id="minAge" placeholder="Min Age">
-        <input id="maxAge" placeholder="Max Age">
-        <input id="condition" placeholder="Condition">
+    <div class="form-row">
+        <input id="trialId" placeholder="Trial ID">
+        <input id="minAge" placeholder="Min Age" type="number">
+        <input id="maxAge" placeholder="Max Age" type="number">
+        <input id="condition" placeholder="Required Condition">
+    </div>
 
-        <textarea id="exclusions" placeholder="Exclusions"></textarea>
+    <div class="form-row">
+        <textarea id="exclusions" placeholder="Exclusion Criteria"></textarea>
+    </div>
 
-        <button class="btn primary" onclick="addCriteria()">Save</button>
+    <div class="form-row">
+        <button class="btn" onclick="saveEligibility()">Save Criteria</button>
+    </div>
 </div>
 
 </div>

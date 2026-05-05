@@ -335,3 +335,177 @@ td:last-child {
     width: 100%;
     margin-top: 10px;
 }
+
+/* FORM ROW FIX */
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+/* INPUT STYLE */
+.form-row input,
+.form-row textarea {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* TEXTAREA SIZE */
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* BUTTON ALIGN */
+.form-row .btn {
+    min-width: 120px;
+}
+
+/* CENTER FORM WRAPPER */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+/* FORM CARD (same as Create Trial) */
+.form-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* LABEL */
+.form-card label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+/* INPUT */
+.form-card input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* BUTTON FULL WIDTH */
+.form-card .btn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.form-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.form-card label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.form-card input,
+.form-card textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.form-card .btn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* LOGIN PAGE BACKGROUND */
+.login-page {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4facfe, #00c9a7);
+    height: 100vh;
+}
+
+/* TOPBAR FOR LOGIN */
+.login-topbar {
+    text-align: center;
+    color: white;
+    background: transparent;
+    box-shadow: none;
+    padding: 20px;
+}
+
+/* CENTERING */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 80px);
+}
+
+/* CARD */
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    width: 320px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+/* HEADER */
+.login-header h2 {
+    margin-bottom: 5px;
+}
+
+.login-header p {
+    color: gray;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* INPUTS */
+.login-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* BUTTON */
+.login-card button {
+    width: 100%;
+}
+
+/* FOOTER */
+.login-footer {
+    margin-top: 15px;
+    font-size: 12px;
+    color: gray;
+}

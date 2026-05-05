@@ -17,11 +17,15 @@ class Report(Base):
     summary = Column(Text, nullable=False)
     result = Column(Text, nullable=False)
 
-    # Optional image path (admin can attach later)
+    # Optional image
     image = Column(String(255), nullable=True)
 
-    # Status for admin approval
-    status = Column(String(20), default="Pending")
+    # Status (now default Published since admin not approving)
+    status = Column(String(20), default="Published")
 
-    # Timestamp
-    created_at = Column(DateTime, default=datetime.utcnow)
+    # 🔥 IMPORTANT FIX
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False   # ensures value is always stored
+    )

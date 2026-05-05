@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.utils.database import get_db
+
 from app.models.trial_model import Trial
 from app.models.enrollment_model import Enrollment
 from app.models.participant_model import Participant
@@ -9,6 +10,8 @@ from app.models.side_effect_model import SideEffect
 from app.models.observation_model import Observation
 from app.models.eligibility_model import EligibilityCriteria
 from app.models.report_model import Report
+from app.models.medication_model import Medication
+
 from app.schemas.report_schema import ReportCreate
 
 router = APIRouter(prefix="/dashboard", tags=["Researcher"])
@@ -42,7 +45,7 @@ def researcher_dashboard(researcher_id: int, db: Session = Depends(get_db)):
     ]
 
 
-# ================= SIDE EFFECTS (FIXED JOIN) =================
+# ================= SIDE EFFECTS =================
 @router.get("/effects/{researcher_id}")
 def get_researcher_effects(researcher_id: int, db: Session = Depends(get_db)):
 
@@ -56,9 +59,7 @@ def get_researcher_effects(researcher_id: int, db: Session = Depends(get_db)):
         )
         .join(Enrollment, Enrollment.participant_id == Participant.participant_id)
         .join(Trial, Trial.trial_id == Enrollment.trial_id)
-
         .join(SideEffect, SideEffect.trial_id == Trial.trial_id)
-
         .filter(Trial.researcher_id == researcher_id)
         .all()
     )
@@ -74,8 +75,8 @@ def get_researcher_effects(researcher_id: int, db: Session = Depends(get_db)):
         for r in results
     ]
 
-from app.models.medication_model import Medication
 
+# ================= ADD MEDICATION =================
 @router.post("/medication")
 def add_medication(data: dict, db: Session = Depends(get_db)):
 
@@ -83,15 +84,43 @@ def add_medication(data: dict, db: Session = Depends(get_db)):
         trial_id=data["trial_id"],
         drug_name=data["drug_name"],
         dosage=data["dosage"],
-        frequency=data["frequency"],
-        researcher_id=data["researcher_id"]
+        frequency=data["frequency"]
     )
 
     db.add(new_med)
     db.commit()
 
-    return {"message": "Medication added"}
+    return {"message": "Medication added successfully"}
 
+
+# ================= GET MEDICATIONS (FILTERED BY RESEARCHER) =================
+@router.get("/medications/{researcher_id}")
+def get_researcher_medications(researcher_id: int, db: Session = Depends(get_db)):
+
+    results = (
+        db.query(
+            Trial.trial_name,
+            Medication.drug_name,
+            Medication.dosage,
+            Medication.frequency
+        )
+        .join(Trial, Trial.trial_id == Medication.trial_id)
+        .filter(Trial.researcher_id == researcher_id)
+        .all()
+    )
+
+    return [
+        {
+            "trial": r[0],
+            "drug_name": r[1],
+            "dosage": r[2],
+            "frequency": r[3]
+        }
+        for r in results
+    ]
+
+
+# ================= ADD OBSERVATION =================
 @router.post("/observation")
 def add_observation(data: dict, db: Session = Depends(get_db)):
 
@@ -107,27 +136,10 @@ def add_observation(data: dict, db: Session = Depends(get_db)):
     db.add(obs)
     db.commit()
 
-    return {"message": "Observation recorded"}
-
-# ================= SUBMIT REPORT =================
-@router.post("/report")
-def submit_report(data: ReportCreate, db: Session = Depends(get_db)):
-
-    report = Report(
-        trial_id=data.trial_id,
-        researcher_id=data.researcher_id,
-        summary=data.summary,
-        result=data.result,
-        status="Pending"
-    )
-
-    db.add(report)
-    db.commit()
-
-    return {"message": "Report submitted"}
+    return {"message": "Observation recorded successfully"}
 
 
-
+# ================= CREATE ELIGIBILITY =================
 @router.post("/eligibility")
 def create_criteria(data: dict, db: Session = Depends(get_db)):
 
@@ -142,7 +154,26 @@ def create_criteria(data: dict, db: Session = Depends(get_db)):
     db.add(criteria)
     db.commit()
 
-    return {"message": "Criteria added"}
+    return {"message": "Criteria added successfully"}
+
+
+# ================= SUBMIT REPORT =================
+@router.post("/report")
+def submit_report(data: ReportCreate, db: Session = Depends(get_db)):
+
+    report = Report(
+        trial_id=data.trial_id,
+        researcher_id=data.researcher_id,
+        summary=data.summary,
+        result=data.result,
+        status="Published"
+    )
+
+    db.add(report)
+    db.commit()
+
+    return {"message": "Report published successfully"}
+
 
 # ================= HEALTH CHECK =================
 @router.get("/")

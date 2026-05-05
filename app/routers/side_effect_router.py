@@ -11,8 +11,8 @@ router = APIRouter(prefix="/side-effect", tags=["Side Effect"])
 def report_side_effect(data: dict, db: Session = Depends(get_db)):
 
     new_effect = SideEffect(
-        trial_id=data.get("trial_id", 1),  # optional fallback
-        participant_id=data["participant_id"],  # ✅ NOW STORED
+        trial_id=data.get("trial_id", 1),
+        participant_id=data["participant_id"],
         effect_type=data["effect_type"],
         severity=data["severity"],
         duration=data["duration"]

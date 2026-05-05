@@ -76,3 +76,4 @@ def get_schedule(participant_id: int, db: Session = Depends(get_db)):
         }
         for r in results
     ]
+

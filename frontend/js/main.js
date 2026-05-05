@@ -81,7 +81,8 @@ function showToast(message) {
 // ================= ADMIN DASHBOARD =================
 
 async function loadAdminDashboard() {
-    const user = requireRole("admin");
+
+    const user = checkAuth("admin");
     if (!user) return;
 
     const table = document.getElementById("tableBody");
@@ -210,9 +211,11 @@ async function deleteTrial(trial_id) {
 // ================= RESEARCHERS =================
 
 async function loadResearchers() {
-    requireRole("admin");
 
-    const table = document.getElementById("researcherTable");
+    const user = checkAuth("admin");
+    if (!user) return;
+
+    const table = document.getElementById("researcherTable"); // ✅ FIX
     if (!table) return;
 
     table.innerHTML = `<tr><td colspan="5">Loading...</td></tr>`;
@@ -220,6 +223,11 @@ async function loadResearchers() {
     const data = await fetchData("http://127.0.0.1:8000/admin/researchers");
 
     table.innerHTML = "";
+
+    if (!data || data.length === 0) {
+        table.innerHTML = `<tr><td colspan="5">No researchers found</td></tr>`;
+        return;
+    }
 
     data.forEach(r => {
         table.innerHTML += `
@@ -285,9 +293,11 @@ async function deleteResearcher(id) {
 // ================= PARTICIPANTS =================
 
 async function loadParticipants() {
-    requireRole("admin");
 
-    const table = document.getElementById("participantTable");
+    const user = checkAuth("admin");
+    if (!user) return;
+
+    const table = document.getElementById("participantTable"); // ✅ FIX
     if (!table) return;
 
     table.innerHTML = `<tr><td colspan="6">Loading...</td></tr>`;
@@ -295,6 +305,11 @@ async function loadParticipants() {
     const data = await fetchData("http://127.0.0.1:8000/admin/participants");
 
     table.innerHTML = "";
+
+    if (!data || data.length === 0) {
+        table.innerHTML = `<tr><td colspan="6">No participants found</td></tr>`;
+        return;
+    }
 
     data.forEach(p => {
         table.innerHTML += `
@@ -305,7 +320,7 @@ async function loadParticipants() {
                 <td>${p.gender}</td>
                 <td>${p.medical_history || "-"}</td>
                 <td>
-                    <button onclick="deleteParticipant(${p.id})" class="btn-delete">Delete</button>
+                    <button onclick="deleteParticipant(${p.participant_id})" class="btn-delete">Delete</button>
                 </td>
             </tr>
         `;
@@ -362,7 +377,7 @@ async function deleteParticipant(id) {
 // ================= RESEARCHER DASHBOARD =================
 
 async function loadResearcherDashboard() {
-    const user = requireRole("researcher");
+    const user = checkAuth("researcher");
     if (!user) return;
 
     const table = document.getElementById("researcher-table");
@@ -396,7 +411,7 @@ async function loadResearcherDashboard() {
 }
 
 async function loadResearcherEffects() {
-    const user = requireRole("researcher");
+    const user = checkAuth("researcher");
     if (!user) return;
 
     const table = document.getElementById("researcherEffects");
@@ -427,26 +442,42 @@ async function loadResearcherEffects() {
 }
 
 async function addMedication() {
-    const user = getUser();
+    const trialId = document.getElementById("med_trial").value;
+    const name = document.getElementById("med_name").value;
+    const dosage = document.getElementById("med_dosage").value;
+    const frequency = document.getElementById("med_frequency").value;
 
-    const trialId = document.getElementById("medTrial").value;
-    const drug = document.getElementById("drugName").value;
-    const dosage = document.getElementById("dosage").value;
-    const freq = document.getElementById("frequency").value;
+    if (!trialId || !name || !dosage || !frequency) {
+        return alert("Fill all fields");
+    }
 
-    await fetch("http://127.0.0.1:8000/dashboard/medication", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            trial_id: trialId,
-            drug_name: drug,
-            dosage: dosage,
-            frequency: freq,
-            researcher_id: user.user_id
-        })
-    });
+    try {
+        const res = await fetch("http://127.0.0.1:8000/dashboard/medication", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                trial_id: parseInt(trialId),
+                drug_name: name,
+                dosage: dosage,
+                frequency: frequency
+            })
+        });
 
-    alert("Medication added");
+        if (!res.ok) {
+            const err = await res.text();
+            console.error(err);
+            return alert("Server error");
+        }
+
+        alert("Medication added successfully");
+
+        // 🔥 refresh table after insert
+        loadResearcherMedications();
+
+    } catch (e) {
+        console.error(e);
+        alert("Connection error");
+    }
 }
 
 async function addObservation() {
@@ -509,11 +540,186 @@ async function addCriteria() {
 
     alert("Criteria saved");
 }
+async function loadResearcherMedications() {
+    const user = checkAuth("researcher");
+    if (!user) return;
 
+    const table = document.getElementById("medicationList");
+    if (!table) return;
+
+    table.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+    const data = await fetchData(
+        `http://127.0.0.1:8000/dashboard/medications/${user.user_id}`
+    );
+
+    table.innerHTML = "";
+
+    if (!data || data.length === 0) {
+        table.innerHTML = "<tr><td colspan='4'>No medications added</td></tr>";
+        return;
+    }
+
+    data.forEach(m => {
+        table.innerHTML += `
+            <tr>
+                <td>${m.trial}</td>
+                <td>${m.drug_name}</td>
+                <td>${m.dosage}</td>
+                <td>${m.frequency}</td>
+            </tr>
+        `;
+    });
+}
+
+async function saveObservation() {
+    const trialId = document.getElementById("obs_trial").value;
+    const participantId = document.getElementById("obs_participant").value;
+    const visitDate = document.getElementById("obs_date").value;
+    const bp = document.getElementById("obs_bp").value;
+    const temp = document.getElementById("obs_temp").value;
+    const notes = document.getElementById("obs_notes").value;
+
+    if (!trialId || !participantId || !visitDate || !bp || !temp) {
+        return showObsMessage("Please fill all required fields", "error");
+    }
+
+    try {
+        const res = await fetch("http://127.0.0.1:8000/dashboard/observation", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                trial_id: parseInt(trialId),
+                participant_id: parseInt(participantId),
+                visit_date: visitDate,
+                blood_pressure: bp,
+                temperature: temp,
+                notes: notes
+            })
+        });
+
+        if (!res.ok) {
+            return showObsMessage("Server error occurred", "error");
+        }
+
+        showObsMessage("Observation saved successfully");
+
+    } catch (e) {
+        showObsMessage("Connection error", "error");
+    }
+}
+
+async function loadResearcherReports() {
+
+    const user = getUser();
+    const table = document.getElementById("reportTable");
+
+    table.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+
+    const data = await fetchData(
+        `http://127.0.0.1:8000/dashboard/reports/researcher/${user.user_id}`
+    );
+
+    table.innerHTML = "";
+
+    if (!data || data.length === 0) {
+        table.innerHTML = "<tr><td colspan='6'>No reports</td></tr>";
+        return;
+    }
+
+    data.forEach(r => {
+        table.innerHTML += `
+            <tr>
+                <td>${r.trial_id}</td>
+                <td>${r.researcher_id}</td>
+                <td>${r.summary}</td>
+                <td>${r.result}</td>
+                <td><span class="status approved">${r.status}</span></td>
+                <td>${r.created_at ? new Date(r.created_at).toLocaleString() : "-"}</td>
+            </tr>
+        `;
+    });
+}
+
+async function submitFinalReport() {
+
+    const user = getUser(); // must be researcher
+
+    const trialId = document.getElementById("report_trial").value;
+    const summary = document.getElementById("report_summary").value;
+    const result = document.getElementById("report_result").value;
+
+    if (!trialId || !summary || !result) {
+        return showReportMsg("Please fill all fields", "error");
+    }
+
+    try {
+        const res = await fetch("http://127.0.0.1:8000/dashboard/report", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                trial_id: parseInt(trialId),
+                researcher_id: user.user_id,
+                summary: summary,
+                result: result
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            return showReportMsg("Server error", "error");
+        }
+
+        showReportMsg("Report published successfully");
+
+        // clear form
+        document.getElementById("report_trial").value = "";
+        document.getElementById("report_summary").value = "";
+        document.getElementById("report_result").value = "";
+
+    } catch (err) {
+        showReportMsg("Connection error", "error");
+    }
+}
+
+async function loadResearcherReports() {
+
+    const user = getUser();
+    const table = document.getElementById("reportTable");
+
+    table.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+
+    const data = await fetchData(
+        `http://127.0.0.1:8000/dashboard/reports/researcher/${user.user_id}`
+    );
+
+    table.innerHTML = "";
+
+    if (!data || data.length === 0) {
+        table.innerHTML = "<tr><td colspan='6'>No reports</td></tr>";
+        return;
+    }
+
+    data.forEach(r => {
+        table.innerHTML += `
+            <tr>
+                <td>${r.trial_id}</td>
+                <td>${r.researcher_id}</td>
+                <td>${r.summary}</td>
+                <td>${r.result}</td>
+                <td><span class="status approved">${r.status}</span></td>
+                <td>${r.created_at ? new Date(r.created_at).toLocaleString() : "-"}</td>
+            </tr>
+        `;
+    });
+}
 // ================= PARTICIPANT DASHBOARD =================
 
 async function loadParticipantDashboard() {
-    const user = requireRole("participant");
+    const user = checkAuth("participant");
     if (!user) return;
 
     const table = document.getElementById("participant-table");
@@ -566,25 +772,41 @@ async function loadAvailableTrials() {
 }
 
 async function applyTrial() {
-    const user = getUser();
+
+    const user = checkAuth("participant");
+    if (!user) return;
+
     const trialId = document.getElementById("applyTrialId").value;
 
-    if (!trialId) return alert("Enter Trial ID");
+    if (!trialId || isNaN(trialId)) {
+        return alert("Enter a valid Trial ID");
+    }
 
-    await fetch(`http://127.0.0.1:8000/enrollment/apply`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            participant_id: user.user_id,
-            trial_id: trialId
-        })
-    });
+    try {
 
-    alert("Applied successfully");
+        const res = await fetch("http://127.0.0.1:8000/enrollment/apply", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                trial_id: parseInt(trialId),
+                participant_id: parseInt(user.user_id)
+            })
+        });
+
+        const data = await res.json();
+
+        alert(data.message || "Applied successfully");
+
+    } catch (err) {
+        console.error(err);
+        alert("Connection error");
+    }
 }
 
 async function loadMedications() {
-    const user = requireRole("participant");
+    const user = checkAuth("participant");
     if (!user) return;
 
     const table = document.getElementById("medicationTable");
@@ -614,22 +836,19 @@ async function loadMedications() {
 
 
 async function loadVisitSchedule() {
-    const user = requireRole("participant");
+   const user = checkAuth("participant");
     if (!user) return;
-
-    const table = document.getElementById("scheduleTable");
-    if (!table) return;
-
-    table.innerHTML = `<tr><td colspan="3">Loading...</td></tr>`;
 
     const data = await fetchData(
         `http://127.0.0.1:8000/dashboard/schedule/${user.user_id}`
     );
 
+    const table = document.getElementById("scheduleTable");
+
     table.innerHTML = "";
 
-    if (data.length === 0) {
-        table.innerHTML = `<tr><td colspan="3">No visits scheduled</td></tr>`;
+    if (!data || data.length === 0) {
+        table.innerHTML = "<tr><td colspan='3'>No visits</td></tr>";
         return;
     }
 
@@ -645,37 +864,59 @@ async function loadVisitSchedule() {
 }
 
 async function reportEffect() {
-    const user = getUser();
 
-    const trialId = document.getElementById("trialSelect").value;
+    const user = checkAuth("participant");
+    if (!user) return;
+
+    const trial = document.getElementById("trialSelect").value;
     const effect = document.getElementById("effectType").value;
     const severity = document.getElementById("severity").value;
     const duration = document.getElementById("duration").value;
 
-    if (!trialId || !effect || !severity || !duration) {
-        return alert("Fill all fields");
+    // 🔥 validation
+    if (!trial) return alert("Select a trial");
+    if (!effect || !severity || !duration) return alert("Fill all fields");
+
+    try {
+
+        const res = await fetch("http://127.0.0.1:8000/side-effect", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                trial_id: parseInt(trial),
+                participant_id: parseInt(user.user_id),
+                effect_type: effect,
+                severity: severity,
+                duration: parseInt(duration)
+            })
+        });
+
+        if (!res.ok) {
+            const err = await res.text();
+            console.error(err);
+            return alert("Server error: " + err);
+        }
+
+        const data = await res.json();
+
+        alert(data.message || "Reported successfully");
+
+        // ✅ clear inputs
+        document.getElementById("effectType").value = "";
+        document.getElementById("severity").value = "";
+        document.getElementById("duration").value = "";
+
+        // 🔄 reload table
+        loadReportedEffects();
+
+    } catch (err) {
+        console.error(err);
+        alert("Connection error");
     }
-
-    await fetch(`http://127.0.0.1:8000/side-effect/report`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            participant_id: user.user_id,
-            trial_id: trialId,
-            effect_type: effect,
-            severity: severity,
-            duration: duration
-        })
-    });
-
-    alert("Reported successfully");
-
-    loadReportedEffects(); // refresh table
 }
 
-
 async function loadReportedEffects() {
-    const user = requireRole("participant");
+   const user = checkAuth("participant");
     if (!user) return;
 
     const table = document.getElementById("effectsTable");
@@ -707,7 +948,8 @@ async function loadReportedEffects() {
 }
 
 async function loadParticipantTrialsForReport() {
-    const user = requireRole("participant");
+
+   const user = checkAuth("participant");
     if (!user) return;
 
     const enrollments = await fetchData(
@@ -752,3 +994,158 @@ async function deleteEnrollment(id) {
     loadAdminDashboard();
 }
 
+// ================= Reports DASHBOARD =================
+// ================= LOAD REPORTS =================
+async function loadReports() {
+
+    const user = checkAuth(["admin", "researcher"]);
+    if (!user) return;
+
+    const table = document.getElementById("reportTable");
+    if (!table) return;
+
+    table.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+
+    // 🔥 SELECT CORRECT API
+    let url = "http://127.0.0.1:8000/dashboard/reports";
+
+    if (user.role === "researcher") {
+        url = `http://127.0.0.1:8000/dashboard/reports/researcher/${user.user_id}`;
+    }
+
+    const data = await fetchData(url);
+
+    table.innerHTML = "";
+
+    if (!data || data.length === 0) {
+        table.innerHTML = "<tr><td colspan='6'>No reports</td></tr>";
+        return;
+    }
+
+    data.forEach(r => {
+        const statusClass = r.status.toLowerCase();
+
+        table.innerHTML += `
+            <tr>
+                <td>${r.trial_id}</td>
+                <td>${r.researcher_id}</td>
+                <td>${r.summary}</td>
+                <td>${r.result}</td>
+                <td><span class="status ${statusClass}">${r.status}</span></td>
+                <td>${r.created_at ? new Date(r.created_at).toLocaleString() : "-"}</td>
+            </tr>
+        `;
+    });
+}
+
+// ================= SUBMIT REPORT =================
+async function submitReport() {
+
+    const user = checkAuth("researcher");
+    if (!user) return;
+
+    const trial = document.getElementById("repTrial").value;
+    const summary = document.getElementById("summary").value;
+    const result = document.getElementById("result").value;
+
+    // ✅ VALIDATION
+    if (!trial || isNaN(trial)) {
+        return alert("Trial ID must be a number");
+    }
+
+    if (!summary || !result) {
+        return alert("Fill all fields");
+    }
+
+    try {
+        const res = await fetch("http://127.0.0.1:8000/dashboard/report", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                trial_id: parseInt(trial),
+                researcher_id: parseInt(user.user_id),
+                summary: summary,
+                result: result
+            })
+        });
+
+        if (!res.ok) {
+            const err = await res.text();
+            console.error("Backend error:", err);
+            return alert("Error: " + err);
+        }
+
+        const data = await res.json();
+
+        alert(data.message);
+
+    } catch (error) {
+        console.error("Fetch error:", error);
+        alert("Connection error");
+    }
+}
+
+async function loadSummary() {
+    const data = await fetchData("http://127.0.0.1:8000/dashboard/summary");
+
+    if (!data) return;
+
+    document.getElementById("totalTrials").innerText = data.total_trials;
+    document.getElementById("totalParticipants").innerText = data.total_participants;
+}
+
+function goToDashboard() {
+    const user = checkAuth();
+    if (!user) return;
+
+    if (user.role === "admin") {
+        window.location.href = "admin_dashboard.html";
+    }
+    else if (user.role === "researcher") {
+        window.location.href = "researcher_dashboard.html";
+    }
+    else {
+        window.location.href = "participant_dashboard.html";
+    }
+}
+
+
+// ================= LOG IN =================
+
+
+function checkAuth(requiredRole = null) {
+
+    const role = localStorage.getItem("role");
+
+    if (!role) {
+        alert("Please login first");
+        window.location.href = "login.html";
+        return null;
+    }
+
+    // 🔥 NEW: support array or string
+    if (requiredRole) {
+
+        // If array → allow multiple roles
+        if (Array.isArray(requiredRole)) {
+            if (!requiredRole.includes(role)) {
+                alert("Unauthorized access");
+                return null;
+            }
+        }
+
+        // If string → behave like before
+        else {
+            if (role !== requiredRole) {
+                alert("Unauthorized access");
+                return null;
+            }
+        }
+    }
+
+    return {
+        role: role,
+        user_id: localStorage.getItem("user_id"),
+        name: localStorage.getItem("name")
+    };
+}

@@ -7,20 +7,30 @@
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>CTMS</h2>
-    <a href="index.html">Home</a>
+
+    <!-- ✅ Dynamic dashboard -->
+    <a href="#" onclick="goToDashboard()">Dashboard</a>
+
     <a href="trials.html" class="active">Trials</a>
     <a href="reports.html">Reports</a>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
+    <!-- TOPBAR -->
     <div class="topbar">
         <h1>Clinical Trials</h1>
+        <button class="btn" onclick="logout()">Logout</button>
     </div>
 
+    <!-- TABLE -->
     <div class="card">
+        <h2>All Trials</h2>
+
         <table>
             <thead>
                 <tr>
@@ -31,13 +41,30 @@
                 </tr>
             </thead>
 
-            <tbody id="trialTable"></tbody>
+            <tbody id="trialTable">
+                <tr>
+                    <td colspan="4">Loading...</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
 </div>
 
+<!-- SCRIPTS -->
+<script src="js/main.js"></script>
 <script src="js/trials.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ✅ USE YOUR EXISTING AUTH SYSTEM
+    const user = checkAuth();  // 🔥 THIS IS THE FIX
+    if (!user) return;
+
+    loadTrials();
+});
+</script>
 
 </body>
 </html>

@@ -11,3 +11,4 @@ class Participant(Base):
     age = Column(Integer)
     gender = Column(String(10))
     medical_history = Column(Text)
+    password = Column(String(255))

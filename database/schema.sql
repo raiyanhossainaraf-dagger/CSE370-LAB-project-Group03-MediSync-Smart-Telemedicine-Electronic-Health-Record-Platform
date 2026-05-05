@@ -1,27 +1,34 @@
 CREATE DATABASE IF NOT EXISTS clinical_trial_db;
 USE clinical_trial_db;
 
+-- ================= RESEARCHER =================
 CREATE TABLE researcher (
     researcher_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     specialization VARCHAR(100),
-    email VARCHAR(100) UNIQUE
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255)
 );
 
+-- ================= ADMIN =================
 CREATE TABLE admin_sponsor (
     admin_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
-    email VARCHAR(100) UNIQUE
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255)
 );
 
+-- ================= PARTICIPANT =================
 CREATE TABLE participant (
     participant_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     age INT,
     gender VARCHAR(10),
-    medical_history TEXT
+    medical_history TEXT,
+    password VARCHAR(255)
 );
 
+-- ================= TRIAL =================
 CREATE TABLE trial (
     trial_id INT AUTO_INCREMENT PRIMARY KEY,
     trial_name VARCHAR(150),
@@ -37,6 +44,7 @@ CREATE TABLE trial (
     FOREIGN KEY (admin_id) REFERENCES admin_sponsor(admin_id)
 );
 
+-- ================= ELIGIBILITY =================
 CREATE TABLE eligibility_criteria (
     criteria_id INT AUTO_INCREMENT PRIMARY KEY,
     trial_id INT,
@@ -48,17 +56,19 @@ CREATE TABLE eligibility_criteria (
     FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
 );
 
+-- ================= ENROLLMENT =================
 CREATE TABLE enrollment (
     enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
     trial_id INT,
     participant_id INT,
     enrollment_date DATE,
-    status VARCHAR(30),
+    status VARCHAR(30) DEFAULT 'Pending',
 
     FOREIGN KEY (trial_id) REFERENCES trial(trial_id),
     FOREIGN KEY (participant_id) REFERENCES participant(participant_id)
 );
 
+-- ================= OBSERVATION =================
 CREATE TABLE observation (
     observation_id INT AUTO_INCREMENT PRIMARY KEY,
     trial_id INT,
@@ -72,6 +82,7 @@ CREATE TABLE observation (
     FOREIGN KEY (participant_id) REFERENCES participant(participant_id)
 );
 
+-- ================= MEDICATION =================
 CREATE TABLE medication (
     medication_id INT AUTO_INCREMENT PRIMARY KEY,
     trial_id INT,
@@ -80,20 +91,24 @@ CREATE TABLE medication (
     frequency VARCHAR(50),
     researcher_id INT,
 
-    FOREIGN KEY (researcher_id) REFERENCES researcher(researcher_id),
-    FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
+    FOREIGN KEY (trial_id) REFERENCES trial(trial_id),
+    FOREIGN KEY (researcher_id) REFERENCES researcher(researcher_id)
 );
 
+-- ================= SIDE EFFECT =================
 CREATE TABLE side_effect (
     effect_id INT AUTO_INCREMENT PRIMARY KEY,
     trial_id INT,
+    participant_id INT,
     effect_type VARCHAR(100),
     severity VARCHAR(20),
     duration INT,
 
-    FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
+    FOREIGN KEY (trial_id) REFERENCES trial(trial_id),
+    FOREIGN KEY (participant_id) REFERENCES participant(participant_id)
 );
 
+-- ================= REPORT =================
 CREATE TABLE report (
     report_id INT AUTO_INCREMENT PRIMARY KEY,
     trial_id INT NOT NULL,
@@ -101,16 +116,9 @@ CREATE TABLE report (
     summary TEXT NOT NULL,
     result TEXT NOT NULL,
     image VARCHAR(255),
-    status VARCHAR(20) DEFAULT 'Pending',
+    status VARCHAR(20) DEFAULT 'Published',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (trial_id) REFERENCES trial(trial_id),
     FOREIGN KEY (researcher_id) REFERENCES researcher(researcher_id)
 );
-
-ALTER TABLE side_effect
-ADD participant_id INT;
-
-ALTER TABLE side_effect
-ADD FOREIGN KEY (participant_id) REFERENCES participant(participant_id);
-

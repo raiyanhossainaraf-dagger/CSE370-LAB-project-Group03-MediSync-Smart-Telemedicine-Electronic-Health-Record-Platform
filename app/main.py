@@ -1,4 +1,6 @@
+# =========================
 # app/main.py
+# =========================
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,45 +8,53 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.utils.database import Base, engine
 
+
 # =========================
-# Create FastAPI App
+# CREATE APP
 # =========================
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION
 )
 
+
 # =========================
-# Enable CORS (Frontend ↔ Backend)
+# CORS CONFIG (Frontend ↔ Backend)
 # =========================
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allow all (for development)
+    allow_origins=["*"],  # ⚠️ change to specific domain in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# =========================
-# Import all models (IMPORTANT)
-# =========================
-from app.models import admin_model
-from app.models import researcher_model
-from app.models import participant_model
-from app.models import trial_model
-from app.models import eligibility_model
-from app.models import enrollment_model
-from app.models import medication_model
-from app.models import observation_model
-from app.models import side_effect_model
 
 # =========================
-# Create database tables
+# IMPORT MODELS (VERY IMPORTANT)
+# =========================
+from app.models import (
+    admin_model,
+    researcher_model,
+    participant_model,
+    trial_model,
+    eligibility_model,
+    enrollment_model,
+    medication_model,
+    observation_model,
+    side_effect_model,
+    report_model   # ✅ FIX (you forgot this)
+)
+
+
+# =========================
+# CREATE TABLES
 # =========================
 Base.metadata.create_all(bind=engine)
 
+
 # =========================
-# Import all routers (CLEAN)
+# IMPORT ROUTERS
 # =========================
 from app.routers import (
     auth_router,
@@ -56,10 +66,11 @@ from app.routers import (
     report_router,
     side_effect_router,
     dashboard_router
-
 )
+
+
 # =========================
-# Include routers (NO DUPLICATES)
+# REGISTER ROUTERS
 # =========================
 app.include_router(auth_router.router)
 app.include_router(admin_router.router)
@@ -69,10 +80,11 @@ app.include_router(trial_router.router)
 app.include_router(enrollment_router.router)
 app.include_router(report_router.router)
 app.include_router(side_effect_router.router)
-app.include_router(dashboard_router.router)  # ✅ IMPORTANT
+app.include_router(dashboard_router.router)
+
 
 # =========================
-# Root endpoint
+# ROOT ENDPOINT
 # =========================
 @app.get("/")
 def home():

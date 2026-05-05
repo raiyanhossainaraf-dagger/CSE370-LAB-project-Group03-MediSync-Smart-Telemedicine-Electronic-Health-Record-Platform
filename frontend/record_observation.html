@@ -4,30 +4,76 @@
     <title>Record Observation</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>CTMS</h2>
+    <a href="researcher_dashboard.html">Dashboard</a>
     <a href="researcher_medication.html">Administrating Medication</a>
-    <a href="record_observation.html">Record Observation</a>
+    <a href="record_observation.html" class="active">Record Observation</a>
     <a href="submit_final_report.html">Final Report</a>
-    <a href="trials.html">Trials</a>
     <a href="reports.html">Reports</a>
+</div>
 
-<div class="card">
-<h2>Record Observation</h2>
+<!-- MAIN -->
+<div class="main">
 
-<div class="form-row">
-            <input id="obsTrial" placeholder="Trial ID">
-            <input id="obsParticipant" placeholder="Participant ID">
-            <input id="visitDate" type="date">
-            <input id="bp" placeholder="Blood Pressure">
-            <input id="temp" placeholder="Temperature">
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <h1>Record Observation</h1>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- FORM SECTION -->
+    <div class="form-container">
+
+        <div class="form-card">
+
+            <h2>Patient Observation</h2>
+
+            <!-- SUCCESS / ERROR MESSAGE -->
+            <div id="obsMessage" style="margin-bottom: 10px;"></div>
+
+            <label>Trial ID</label>
+            <input id="obs_trial" placeholder="Enter Trial ID">
+
+            <label>Participant ID</label>
+            <input id="obs_participant" placeholder="Enter Participant ID">
+
+            <label>Visit Date</label>
+            <input type="date" id="obs_date">
+
+            <label>Blood Pressure</label>
+            <input id="obs_bp" placeholder="e.g. 120/80">
+
+            <label>Temperature</label>
+            <input id="obs_temp" placeholder="e.g. 98.6°F">
+
+            <label>Clinical Notes</label>
+            <textarea id="obs_notes" placeholder="Enter observations..."></textarea>
+
+            <button class="btn primary" onclick="saveObservation()">
+                Save Observation
+            </button>
+
         </div>
 
-        <textarea id="notes" placeholder="Clinical notes"></textarea>
-
-        <button class="btn primary" onclick="addObservation()">Save</button>
     </div>
+
 </div>
+
+<script src="js/main.js"></script>
+
+<script>
+    // Optional UX improvement
+    function showObsMessage(msg, type = "success") {
+        const box = document.getElementById("obsMessage");
+        box.innerHTML = msg;
+        box.style.color = type === "success" ? "green" : "red";
+    }
+</script>
+
 </body>
 </html>

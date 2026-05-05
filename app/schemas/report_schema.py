@@ -1,8 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from datetime import datetime
 
 
-# 🔹 Request (when researcher submits report)
 class ReportCreate(BaseModel):
     trial_id: int
     researcher_id: int
@@ -10,15 +9,14 @@ class ReportCreate(BaseModel):
     result: str
 
 
-# 🔹 Response (when fetching report)
 class ReportOut(BaseModel):
     report_id: int
     trial_id: int
     researcher_id: int
     summary: str
     result: str
-    image: Optional[str]
     status: str
+    created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -2,20 +2,23 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.utils.database import get_db
-from app.models.admin_model import AdminSponsor
 from app.models.researcher_model import Researcher
+from app.models.admin_model import AdminSponsor
 from app.models.participant_model import Participant
+
+from app.schemas.auth_schema import LoginRequest, LoginResponse
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-@router.post("/login")
-def login(data: dict, db: Session = Depends(get_db)):
+@router.post("/login", response_model=LoginResponse)
+def login(data: LoginRequest, db: Session = Depends(get_db)):
 
-    username = data.get("username")
-
-    # Check Admin
-    admin = db.query(AdminSponsor).filter(AdminSponsor.name == username).first()
+    # ================= ADMIN =================
+    admin = db.query(AdminSponsor).filter(
+        AdminSponsor.name == data.username,
+        AdminSponsor.password == data.password
+    ).first()
 
     if admin:
         return {
@@ -24,8 +27,12 @@ def login(data: dict, db: Session = Depends(get_db)):
             "name": admin.name
         }
 
-    # Check Researcher
-    researcher = db.query(Researcher).filter(Researcher.name == username).first()
+    # ================= RESEARCHER =================
+    researcher = db.query(Researcher).filter(
+        Researcher.name == data.username,
+        Researcher.password == data.password
+    ).first()
+
     if researcher:
         return {
             "role": "researcher",
@@ -33,8 +40,12 @@ def login(data: dict, db: Session = Depends(get_db)):
             "name": researcher.name
         }
 
-    # Check Participant
-    participant = db.query(Participant).filter(Participant.name == username).first()
+    # ================= PARTICIPANT =================
+    participant = db.query(Participant).filter(
+        Participant.name == data.username,
+        Participant.password == data.password
+    ).first()
+
     if participant:
         return {
             "role": "participant",
@@ -42,4 +53,5 @@ def login(data: dict, db: Session = Depends(get_db)):
             "name": participant.name
         }
 
-    raise HTTPException(status_code=401, detail="Invalid user")
+    # ================= INVALID =================
+    raise HTTPException(status_code=401, detail="Invalid credentials")

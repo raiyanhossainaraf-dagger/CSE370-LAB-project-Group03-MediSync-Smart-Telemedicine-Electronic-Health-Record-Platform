@@ -6,3 +6,4 @@ class AdminSponsor(Base):
 
     admin_id = Column(Integer, primary_key=True)
     name = Column(String)
+    password = Column(String(255))

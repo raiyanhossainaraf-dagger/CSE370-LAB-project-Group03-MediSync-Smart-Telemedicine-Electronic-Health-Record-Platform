@@ -1,42 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reports Dashboard</title>
+    <title>Reports</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>CTMS</h2>
-    <a href="index.html">Home</a>
-    <a href="trials.html">Trials</a>
+
+    <!-- dynamic dashboard navigation -->
+    <a href="#" onclick="goToDashboard()">Dashboard</a>
     <a href="reports.html" class="active">Reports</a>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
+    <!-- TOPBAR -->
     <div class="topbar">
-        <h1>Reports Dashboard</h1>
+        <h1>Clinical Trial Reports</h1>
+        <button class="btn" onclick="logout()">Logout</button>
     </div>
 
+    <!-- SUMMARY -->
     <div class="cards">
-
         <div class="stat-card">
             <h3>Total Trials</h3>
-            <p id="trials">Loading...</p>
+            <p id="totalTrials">--</p>
         </div>
 
         <div class="stat-card">
             <h3>Total Participants</h3>
-            <p id="participants">Loading...</p>
+            <p id="totalParticipants">--</p>
         </div>
+    </div>
 
+    <!-- REPORT TABLE -->
+    <div class="card">
+        <h2>Published Reports</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Trial ID</th>
+                    <th>Researcher ID</th>
+                    <th>Summary</th>
+                    <th>Result</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody id="reportTable">
+                <tr>
+                    <td colspan="6">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 </div>
 
-<script src="js/report.js"></script>
+<!-- SCRIPTS -->
+<script src="js/main.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // 🔐 Allow both admin & researcher
+    const user = checkAuth(["admin", "researcher"]);
+    if (!user) return;
+
+    // 🚀 Load data
+    loadReports();
+    loadSummary();
+});
+</script>
 
 </body>
 </html>
