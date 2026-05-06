@@ -65,7 +65,7 @@
             </thead>
 
             <tbody id="tableBody">
-                <!-- Data loads dynamically -->
+
             </tbody>
         </table>
     </div>
@@ -76,10 +76,10 @@
 <script src="js/main.js"></script>
 
 <script>
-    // Load data
+
     loadAdminDashboard();
 
-    // 🔍 Simple search filter
+    // search filter
     document.getElementById("searchInput").addEventListener("input", function () {
         const value = this.value.toLowerCase();
         const rows = document.querySelectorAll("#tableBody tr");

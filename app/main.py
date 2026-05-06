@@ -23,7 +23,7 @@ app = FastAPI(
 # =========================
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ⚠️ change to specific domain in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -43,7 +43,7 @@ from app.models import (
     medication_model,
     observation_model,
     side_effect_model,
-    report_model   # ✅ FIX (you forgot this)
+    report_model
 )
 
 

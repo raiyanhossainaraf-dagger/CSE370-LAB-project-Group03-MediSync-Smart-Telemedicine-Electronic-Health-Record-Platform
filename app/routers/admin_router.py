@@ -17,7 +17,7 @@ def get_admin_dashboard(db: Session = Depends(get_db)):
 
     data = (
         db.query(
-            Enrollment.enrollment_id,  # 🔥 ADDED (DO NOT REMOVE)
+            Enrollment.enrollment_id,
             Participant.name.label("participant"),
             Trial.trial_name.label("trial"),
             Trial.phase.label("phase"),
@@ -32,7 +32,7 @@ def get_admin_dashboard(db: Session = Depends(get_db)):
 
     return [
         {
-            "id": row[0],  # 🔥 REQUIRED for buttons
+            "id": row[0],
             "participant": row[1],
             "trial": row[2],
             "phase": row[3],

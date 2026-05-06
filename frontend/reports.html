@@ -70,11 +70,11 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 🔐 Allow both admin & researcher
+
     const user = checkAuth(["admin", "researcher"]);
     if (!user) return;
 
-    // 🚀 Load data
+
     loadReports();
     loadSummary();
 });

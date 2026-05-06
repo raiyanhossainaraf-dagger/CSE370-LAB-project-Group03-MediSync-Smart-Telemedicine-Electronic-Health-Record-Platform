@@ -90,7 +90,7 @@ async function loadAdminDashboard() {
 
     table.innerHTML = `<tr><td colspan="7">Loading...</td></tr>`;
 
-    // ✅ FIXED API
+
     const data = await fetchData("http://127.0.0.1:8000/admin/info");
 
     if (!data || data.length === 0) {
@@ -901,12 +901,12 @@ async function reportEffect() {
 
         alert(data.message || "Reported successfully");
 
-        // ✅ clear inputs
+
         document.getElementById("effectType").value = "";
         document.getElementById("severity").value = "";
         document.getElementById("duration").value = "";
 
-        // 🔄 reload table
+
         loadReportedEffects();
 
     } catch (err) {

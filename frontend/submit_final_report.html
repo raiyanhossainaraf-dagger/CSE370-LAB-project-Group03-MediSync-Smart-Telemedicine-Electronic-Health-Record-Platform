@@ -34,7 +34,7 @@
 
             <div id="reportMsg" style="margin-bottom: 10px;"></div>
 
-            <!-- 🔥 FIX: number input -->
+
             <label>Trial ID</label>
             <input type="number" id="report_trial" placeholder="Enter Trial ID">
 
@@ -57,7 +57,7 @@
 
 <script>
 
-// 🔐 AUTH CHECK ON PAGE LOAD
+
 document.addEventListener("DOMContentLoaded", () => {
     const user = checkAuth("researcher");
     if (!user) return;
@@ -82,7 +82,7 @@ async function submitFinalReport() {
     const summary = document.getElementById("report_summary").value;
     const result = document.getElementById("report_result").value;
 
-    // 🔥 VALIDATION
+
     if (!trial || isNaN(trial)) {
         return showReportMsg("Trial ID must be a valid number", "error");
     }
@@ -104,7 +104,7 @@ async function submitFinalReport() {
             })
         });
 
-        // 🔥 HANDLE BACKEND ERRORS
+
         if (!res.ok) {
             const err = await res.text();
             console.error(err);
@@ -115,7 +115,7 @@ async function submitFinalReport() {
 
         showReportMsg(data.message, "success");
 
-        // ✅ clear form
+
         document.getElementById("report_trial").value = "";
         document.getElementById("report_summary").value = "";
         document.getElementById("report_result").value = "";

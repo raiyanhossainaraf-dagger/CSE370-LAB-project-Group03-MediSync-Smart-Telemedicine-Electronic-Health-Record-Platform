@@ -1,4 +1,3 @@
-# app/schemas/admin_schema.py
 
 from pydantic import BaseModel
 

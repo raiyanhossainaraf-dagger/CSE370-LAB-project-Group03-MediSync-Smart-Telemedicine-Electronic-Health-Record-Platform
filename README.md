@@ -13,10 +13,10 @@ This project has been developed as an academic final project for the Database Ma
 The main objectives of this project are:
 
 - To manage clinical trial records in an efficient and structured manner.
-- To automate participant eligibility verification based on predefined criteria.
 - To track medication schedules, observations, and trial progress.
 - To record adverse events and side effects during trial periods.
 - To provide separate dashboards for Admins, Researchers, and Participants.
+- To automate participant eligibility verification based on predefined criteria.
 - To demonstrate practical DBMS concepts through a real-world healthcare application.
 
 ---

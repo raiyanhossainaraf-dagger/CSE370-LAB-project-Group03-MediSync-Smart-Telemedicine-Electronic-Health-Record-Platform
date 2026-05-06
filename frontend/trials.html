@@ -11,7 +11,7 @@
 <div class="sidebar">
     <h2>CTMS</h2>
 
-    <!-- ✅ Dynamic dashboard -->
+
     <a href="#" onclick="goToDashboard()">Dashboard</a>
 
     <a href="trials.html" class="active">Trials</a>
@@ -58,8 +58,8 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ✅ USE YOUR EXISTING AUTH SYSTEM
-    const user = checkAuth();  // 🔥 THIS IS THE FIX
+
+    const user = checkAuth();
     if (!user) return;
 
     loadTrials();
